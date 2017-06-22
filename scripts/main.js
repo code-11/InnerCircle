@@ -1,3 +1,4 @@
+/// <reference path="index.d.ts" />
 var Startup = (function () {
     function Startup() {
     }
@@ -7,4 +8,6 @@ var Startup = (function () {
     };
     return Startup;
 }());
-Startup.main();
+$(document).ready(function () {
+    Startup.main();
+});
