@@ -1,4 +1,4 @@
-/// <reference path="index.d.ts" />
+import * as $ from 'jquery';
 
 class Startup {
     public static main(): number {

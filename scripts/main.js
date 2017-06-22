@@ -1,13 +1,11 @@
-/// <reference path="index.d.ts" />
-var Startup = (function () {
-    function Startup() {
-    }
-    Startup.main = function () {
+import * as $ from 'jquery';
+class Startup {
+    static main() {
         console.log('Hello World');
         return 0;
-    };
-    return Startup;
-}());
+    }
+}
 $(document).ready(function () {
     Startup.main();
 });
+//# sourceMappingURL=main.js.map
