@@ -1,3 +1,9 @@
+//0->untrained
+//1->novice
+//2->some training
+//3->knowleable
+//4->professional
+//5->expert
 export class Character {
     private intuition: number;
     private charisma: number;
@@ -16,14 +22,14 @@ export class Character {
     private men: number;
 
     public constructor(
-        intuition: number,
-        charisma: number,
-        luck: number,
-        know_law: number,
-        know_money: number,
-        know_religion: number,
-        know_arms: number,
-        know_logistics: number
+        intuition?: number,
+        charisma?: number,
+        luck?: number,
+        know_law?: number,
+        know_money?: number,
+        know_religion?: number,
+        know_arms?: number,
+        know_logistics?: number
     ) {
         this.intuition = intuition;
         this.charisma = charisma;
@@ -33,5 +39,69 @@ export class Character {
         this.know_religion = know_religion;
         this.know_arms = know_arms;
         this.know_logistics = know_logistics;
+    }
+
+    public getIntuition(): number {
+        return this.intuition;
+    }
+
+    public getCharisma(): number {
+        return this.charisma;
+    }
+
+    public getLuck(): number {
+        return this.luck;
+    }
+
+    public getKnowLaw(): number {
+        return this.know_law;
+    }
+
+    public getKnowMoney(): number {
+        return this.know_money;
+    }
+
+    public getKnowReligion(): number {
+        return this.know_religion;
+    }
+
+    public getKnowArms(): number {
+        return this.know_arms;
+    }
+
+    public getKnowLogistics(): number {
+        return this.know_logistics;
+    }
+
+    public setIntuition(newVal: number): void {
+        this.intuition = newVal;
+    }
+
+    public setCharisma(newVal: number): void {
+        this.charisma = newVal;
+    }
+
+    public setLuck(newVal: number): void {
+        this.luck = newVal;
+    }
+
+    public setKnowLaw(newVal: number): void {
+        this.know_law = newVal;
+    }
+
+    public setKnowMoney(newVal: number): void {
+        this.know_money = newVal;
+    }
+
+    public setKnowReligion(newVal: number): void {
+        this.know_religion = newVal;
+    }
+
+    public setKnowArms(newVal: number): void {
+        this.know_arms = newVal;
+    }
+
+    public setKnowLogistics(newVal: number): void {
+        this.know_logistics = newVal;
     }
 }

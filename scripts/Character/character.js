@@ -1,6 +1,12 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    //0->untrained
+    //1->novice
+    //2->some training
+    //3->knowleable
+    //4->professional
+    //5->expert
     class Character {
         constructor(intuition, charisma, luck, know_law, know_money, know_religion, know_arms, know_logistics) {
             this.intuition = intuition;
@@ -11,6 +17,54 @@ define(["require", "exports"], function (require, exports) {
             this.know_religion = know_religion;
             this.know_arms = know_arms;
             this.know_logistics = know_logistics;
+        }
+        getIntuition() {
+            return this.intuition;
+        }
+        getCharisma() {
+            return this.charisma;
+        }
+        getLuck() {
+            return this.luck;
+        }
+        getKnowLaw() {
+            return this.know_law;
+        }
+        getKnowMoney() {
+            return this.know_money;
+        }
+        getKnowReligion() {
+            return this.know_religion;
+        }
+        getKnowArms() {
+            return this.know_arms;
+        }
+        getKnowLogistics() {
+            return this.know_logistics;
+        }
+        setIntuition(newVal) {
+            this.intuition = newVal;
+        }
+        setCharisma(newVal) {
+            this.charisma = newVal;
+        }
+        setLuck(newVal) {
+            this.luck = newVal;
+        }
+        setKnowLaw(newVal) {
+            this.know_law = newVal;
+        }
+        setKnowMoney(newVal) {
+            this.know_money = newVal;
+        }
+        setKnowReligion(newVal) {
+            this.know_religion = newVal;
+        }
+        setKnowArms(newVal) {
+            this.know_arms = newVal;
+        }
+        setKnowLogistics(newVal) {
+            this.know_logistics = newVal;
         }
     }
     exports.Character = Character;

@@ -1,31 +1,45 @@
 ﻿import { Frame } from "../../scripts/frame";
 
+interface HashTable<T> {
+    [key: string]: T;
+}
+
 export class CharacterCreator extends Frame {
-    public content(): String {
+
+    private capitalizeFirstLetter(str:string) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    private attrToDisplayName: HashTable<string> = {
+        "intuition": "Intuition",
+        "charisma": "Charisma",
+        "luck": "Luck",
+        "know_law": "Knowledge Law",
+        "know_money": "Knowledge Money",
+        "know_religion": "Knowledge Religion",
+        "know_arms": "Knowledge Arms",
+        "know_logistics" : "Knowledge Logistics"
+    };
+
+    private genAttrWidget(attrName: string) {
+        let displayStr: string = this.attrToDisplayName[attrName];
         return `
-                <label for="intuition">Intuition:</label>
-                <input type="number" name="intuition" id="intuition" value="0" style="width: 150px;" />
+        <label for="${attrName}">${displayStr}:</label>
+        <input type="number" name="${attrName}" id="${attrName}" value="0" style="width: 150px;" />
+        `;
+    }
 
-                <label for="charisma">Charisma:</label>
-                <input type="number" name="charisma" id="charisma" value="0" style="width: 150px;" />;
-
-                <label for="luck" > Luck:</label>
-                <input type= "number" name= "luck" id= "luck" value= "0" style= "width: 150px;" />;
-
-                <label for="know_law">Knowledge-Law:</label>
-                <input type="number" name="know_law" id="know_law" value="0" style="width: 150px;" />;
-
-                <label for="know_money" > Knowledge-Money:</label>
-                <input type= "number" name= "know_money" id= "know_money" value= "0" style= "width: 150px;" />;
-
-                <label for="know_religion">Knowledge-Religion:</label>
-                <input type="number" name="know_religion" id="know_religion" value="0" style="width: 150px;" />;
-
-                <label for="know_arms" > Knowledge-Arms:</label>
-                <input type= "number" name= "know_arms" id= "know_arms" value= "0" style= "width: 150px;" />;
-
-                <label for="know_logistics">Knowledge-Logistics:</label>
-                <input type="number" name="know_logistics" id="know_logistics" value="0" style="width: 150px;" />`;
+    public content(): String {
+        let toReturn: string =
+            this.genAttrWidget("intuition") +
+            this.genAttrWidget("charisma") +
+            this.genAttrWidget("luck") +
+            this.genAttrWidget("know_law") +
+            this.genAttrWidget("know_money") +
+            this.genAttrWidget("know_religion") +
+            this.genAttrWidget("know_arms") +
+            this.genAttrWidget("know_logistics");
+        return toReturn;
     }
     public bindings(): void {
     }
