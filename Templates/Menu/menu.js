@@ -1,4 +1,4 @@
-define(["require", "exports", "../../scripts/frame"], function (require, exports, frame_1) {
+define(["require", "exports", "../../scripts/frame", "../CharacterCreator/characterCreator"], function (require, exports, frame_1, characterCreator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Menu extends frame_1.Frame {
@@ -12,8 +12,9 @@ define(["require", "exports", "../../scripts/frame"], function (require, exports
     `;
         }
         bindings() {
+            let self = this;
             $("#test").click(function () {
-                console.log("link!");
+                self.switchFrame(new characterCreator_1.CharacterCreator());
             });
         }
         structure() {

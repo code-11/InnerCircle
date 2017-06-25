@@ -6,8 +6,12 @@ export abstract class Frame {
     public abstract structure(): String;
     public abstract style(): String;
 
-    public static switch(newFrame: Frame): void {
+    public static switchFrame(newFrame: Frame): void {
         document.getElementById(Frame.frameBoxID).innerHTML = newFrame.content().toString();
         newFrame.bindings();
+    }
+
+    public switchFrame(newFrame: Frame): void {
+        Frame.switchFrame(newFrame);
     }
 }

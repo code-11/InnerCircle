@@ -10,7 +10,7 @@ define(["require", "exports", "jquery", "../Templates/Menu/menu", "frame"], func
     //https://gist.github.com/olanod/ede8befb771057bb004c4f57be591640/
     $(document).ready(function () {
         Startup.main();
-        frame_1.Frame.switch(new menu_1.Menu());
+        frame_1.Frame.switchFrame(new menu_1.Menu());
         //document.getElementById("main-frame").innerHTML = Menu.menu.toString();
         //Menu.bindings();
     });

@@ -1,4 +1,5 @@
 ﻿import { Frame } from "../../scripts/frame";
+import { CharacterCreator } from "../CharacterCreator/characterCreator";
 export class Menu extends Frame {
     public content(): String {
     return `
@@ -10,8 +11,9 @@ export class Menu extends Frame {
     `;
     }
     public bindings(): void {
+        let self = this;
         $("#test").click(function () {
-            console.log("link!");
+            self.switchFrame(new CharacterCreator());
         });
     }
     public structure(): String {

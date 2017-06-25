@@ -11,7 +11,7 @@ class Startup {
 //https://gist.github.com/olanod/ede8befb771057bb004c4f57be591640/
 $(document).ready(function () {
     Startup.main();
-    Frame.switch(new Menu());
+    Frame.switchFrame(new Menu());
     //document.getElementById("main-frame").innerHTML = Menu.menu.toString();
     //Menu.bindings();
 });
