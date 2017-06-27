@@ -12,7 +12,7 @@ define(["require", "exports", "../../scripts/frame"], function (require, exports
                 "know_money": "Knowledge Money",
                 "know_religion": "Knowledge Religion",
                 "know_arms": "Knowledge Arms",
-                "know_logistics": "Knowledge_Logistics"
+                "know_logistics": "Knowledge Logistics"
             };
         }
         capitalizeFirstLetter(str) {
@@ -33,7 +33,8 @@ define(["require", "exports", "../../scripts/frame"], function (require, exports
                 this.genAttrWidget("know_money") +
                 this.genAttrWidget("know_religion") +
                 this.genAttrWidget("know_arms") +
-                this.genAttrWidget("know_logistics");
+                this.genAttrWidget("know_logistics") +
+                `<custom-spinner></custom-spinner>`;
             return toReturn;
         }
         bindings() {

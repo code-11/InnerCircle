@@ -1,6 +1,8 @@
 import * as $ from 'jquery';
 import { Menu } from '../Templates/Menu/menu';
 import { Frame } from 'frame';
+import { Spinner } from "../Elements/spinner";
+
 
 class Startup {
     public static main(): number {
@@ -12,6 +14,7 @@ class Startup {
 $(document).ready(function () {
     Startup.main();
     Frame.switchFrame(new Menu());
+    customElements.define("custom-spinner", Spinner);
     //document.getElementById("main-frame").innerHTML = Menu.menu.toString();
     //Menu.bindings();
 });

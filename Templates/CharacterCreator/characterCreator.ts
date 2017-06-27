@@ -38,7 +38,8 @@ export class CharacterCreator extends Frame {
             this.genAttrWidget("know_money") +
             this.genAttrWidget("know_religion") +
             this.genAttrWidget("know_arms") +
-            this.genAttrWidget("know_logistics");
+            this.genAttrWidget("know_logistics") +
+            `<custom-spinner></custom-spinner>`
         return toReturn;
     }
     public bindings(): void {

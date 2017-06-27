@@ -1,4 +1,4 @@
-define(["require", "exports", "jquery", "../Templates/Menu/menu", "frame"], function (require, exports, $, menu_1, frame_1) {
+define(["require", "exports", "jquery", "../Templates/Menu/menu", "frame", "../Elements/spinner"], function (require, exports, $, menu_1, frame_1, spinner_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Startup {
@@ -11,6 +11,7 @@ define(["require", "exports", "jquery", "../Templates/Menu/menu", "frame"], func
     $(document).ready(function () {
         Startup.main();
         frame_1.Frame.switchFrame(new menu_1.Menu());
+        customElements.define("custom-spinner", spinner_1.Spinner);
         //document.getElementById("main-frame").innerHTML = Menu.menu.toString();
         //Menu.bindings();
     });
