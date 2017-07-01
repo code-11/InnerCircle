@@ -4,6 +4,7 @@ export class CharacterCreatorModel {
     private points: number;
     public constructor() {
         this.base = new Character();
+        this.points = 10;
     }
 
     private enoughPoints(decr: number = 0): boolean {
@@ -160,5 +161,9 @@ export class CharacterCreatorModel {
     public incrementKnowLogistics(): void {
         this.points -= 1;
         this.base.setKnowLogistics(this.base.getKnowLogistics() + 1);
+    }
+
+    public getIntuition(): number {
+        return this.base.getIntuition();
     }
 }

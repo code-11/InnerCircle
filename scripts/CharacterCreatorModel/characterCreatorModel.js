@@ -4,6 +4,7 @@ define(["require", "exports", "../Character/character"], function (require, expo
     class CharacterCreatorModel {
         constructor() {
             this.base = new character_1.Character();
+            this.points = 10;
         }
         enoughPoints(decr = 0) {
             return !(this.points - decr < 0);
@@ -125,6 +126,9 @@ define(["require", "exports", "../Character/character"], function (require, expo
         incrementKnowLogistics() {
             this.points -= 1;
             this.base.setKnowLogistics(this.base.getKnowLogistics() + 1);
+        }
+        getIntuition() {
+            return this.base.getIntuition();
         }
     }
     exports.CharacterCreatorModel = CharacterCreatorModel;

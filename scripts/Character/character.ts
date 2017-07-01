@@ -22,14 +22,14 @@ export class Character {
     private men: number;
 
     public constructor(
-        intuition?: number,
-        charisma?: number,
-        luck?: number,
-        know_law?: number,
-        know_money?: number,
-        know_religion?: number,
-        know_arms?: number,
-        know_logistics?: number
+        intuition = 0,
+        charisma = 0,
+        luck = 0,
+        know_law = 0,
+        know_money = 0,
+        know_religion = 0,
+        know_arms = 0,
+        know_logistics = 0
     ) {
         this.intuition = intuition;
         this.charisma = charisma;

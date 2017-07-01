@@ -1,4 +1,5 @@
 ﻿import { Frame } from "../../scripts/frame";
+import { CharacterCreatorModel } from "../../scripts/CharacterCreatorModel/characterCreatorModel";
 
 interface HashTable<T> {
     [key: string]: T;
@@ -6,7 +7,14 @@ interface HashTable<T> {
 
 export class CharacterCreator extends Frame {
 
-    private capitalizeFirstLetter(str:string) {
+    private model: CharacterCreatorModel;
+
+    constructor() {
+        super();
+        this.model = new CharacterCreatorModel();
+    }
+
+    private static capitalizeFirstLetter(str:string) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
@@ -21,12 +29,9 @@ export class CharacterCreator extends Frame {
         "know_logistics" : "Knowledge Logistics"
     };
 
-    private genAttrWidget(attrName: string) {
+    private genAttrWidget(attrName: string): string {
         let displayStr: string = this.attrToDisplayName[attrName];
-        return `
-        <label for="${attrName}">${displayStr}:</label>
-        <input type="number" name="${attrName}" id="${attrName}" value="0" style="width: 150px;" />
-        `;
+        return `<custom-spinner id="${attrName}" data-type="${displayStr}"> </custom-spinner>`;
     }
 
     public content(): String {
@@ -38,17 +43,35 @@ export class CharacterCreator extends Frame {
             this.genAttrWidget("know_money") +
             this.genAttrWidget("know_religion") +
             this.genAttrWidget("know_arms") +
-            this.genAttrWidget("know_logistics") +
-            `<custom-spinner></custom-spinner>`
+            this.genAttrWidget("know_logistics");
         return toReturn;
     }
+
     public bindings(): void {
+        let theModel: CharacterCreatorModel = this.model;
+        $("#intuition-up").click(
+            () => {
+                if (theModel.canIncrementIntuition()) {
+                    theModel.incrementIntuition();
+                }
+                $("#intuition-val").text(theModel.getIntuition().toString());
+                console.log(theModel.getIntuition());
+                console.log(theModel.getPoints());
+            });
+        //this.intuition.assignOnDown(
+        //    () => {
+        //        console.log("derp");
+        //        if (theModel.canDecrementIntuition()) {
+        //            theModel.decrementIntuition();
+        //        }
+        //    }
+        //)
     }
-    public structure(): String {
-        throw new Error("Method not implemented.");
-    }
-    public style(): String {
-        throw new Error("Method not implemented.");
+
+    public structureFrame(): void{
+        let frameStyle: CSSStyleDeclaration = document.getElementById("main-frame").style;
+        frameStyle.display = "inline-flex";
+        frameStyle.flexDirection = "column";
     }
 
 }

@@ -1,6 +1,7 @@
 ﻿import { Frame } from "../../scripts/frame";
 import { CharacterCreator } from "../CharacterCreator/characterCreator";
 export class Menu extends Frame {
+
     public content(): String {
     return `
     <ol>
@@ -16,11 +17,8 @@ export class Menu extends Frame {
             self.switchFrame(new CharacterCreator());
         });
     }
-    public structure(): String {
-        throw new Error("Method not implemented.");
-    }
-    public style(): String {
-        throw new Error("Method not implemented.");
+
+    public structureFrame(): void {
     }
 }
 

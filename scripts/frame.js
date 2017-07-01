@@ -4,6 +4,7 @@ define(["require", "exports"], function (require, exports) {
     class Frame {
         static switchFrame(newFrame) {
             document.getElementById(Frame.frameBoxID).innerHTML = newFrame.content().toString();
+            newFrame.structureFrame();
             newFrame.bindings();
         }
         switchFrame(newFrame) {

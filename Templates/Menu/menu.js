@@ -17,11 +17,7 @@ define(["require", "exports", "../../scripts/frame", "../CharacterCreator/charac
                 self.switchFrame(new characterCreator_1.CharacterCreator());
             });
         }
-        structure() {
-            throw new Error("Method not implemented.");
-        }
-        style() {
-            throw new Error("Method not implemented.");
+        structureFrame() {
         }
     }
     exports.Menu = Menu;
