@@ -4,35 +4,29 @@ define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCre
     class CharacterCreator extends frame_1.Frame {
         constructor() {
             super();
-            this.attrToDisplayName = {
-                "intuition": "Intuition",
-                "charisma": "Charisma",
-                "luck": "Luck",
-                "know_law": "Knowledge Law",
-                "know_money": "Knowledge Money",
-                "know_religion": "Knowledge Religion",
-                "know_arms": "Knowledge Arms",
-                "know_logistics": "Knowledge Logistics"
-            };
             this.model = new characterCreatorModel_1.CharacterCreatorModel();
         }
         static capitalizeFirstLetter(str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         }
         genAttrWidget(attrName) {
-            let displayStr = this.attrToDisplayName[attrName];
-            return `<custom-spinner id="${attrName}" data-type="${displayStr}"> </custom-spinner>`;
+            let displayStr = CharacterCreator.attrToDisplayName[attrName];
+            let spinner = document.createElement("custom-spinner");
+            spinner.id = attrName;
+            spinner.setAttribute("data-type", displayStr);
+            return spinner;
         }
-        content() {
-            let toReturn = this.genAttrWidget("intuition") +
-                this.genAttrWidget("charisma") +
-                this.genAttrWidget("luck") +
-                this.genAttrWidget("know_law") +
-                this.genAttrWidget("know_money") +
-                this.genAttrWidget("know_religion") +
-                this.genAttrWidget("know_arms") +
-                this.genAttrWidget("know_logistics");
-            return toReturn;
+        createContent() {
+            let box = document.createElement("div");
+            box.appendChild(this.genAttrWidget("intuition"));
+            box.appendChild(this.genAttrWidget("charisma"));
+            box.appendChild(this.genAttrWidget("luck"));
+            box.appendChild(this.genAttrWidget("know_law"));
+            box.appendChild(this.genAttrWidget("know_money"));
+            box.appendChild(this.genAttrWidget("know_religion"));
+            box.appendChild(this.genAttrWidget("know_arms"));
+            box.appendChild(this.genAttrWidget("know_logistics"));
+            return box;
         }
         bindings() {
             let theModel = this.model;
@@ -59,6 +53,16 @@ define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCre
             frameStyle.flexDirection = "column";
         }
     }
+    CharacterCreator.attrToDisplayName = {
+        "intuition": "Intuition",
+        "charisma": "Charisma",
+        "luck": "Luck",
+        "know_law": "Knowledge Law",
+        "know_money": "Knowledge Money",
+        "know_religion": "Knowledge Religion",
+        "know_arms": "Knowledge Arms",
+        "know_logistics": "Knowledge Logistics"
+    };
     exports.CharacterCreator = CharacterCreator;
 });
 //# sourceMappingURL=characterCreator.js.map

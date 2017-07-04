@@ -7,12 +7,17 @@
 
     constructor() {
         super();
+        this.initSpinner();
+    }
+
+    private initSpinner(): void {
+        var shadow = this.attachShadow({ mode: 'open' });
         this.lbl = document.createElement("label");
         this.valLbl = document.createElement("label");
 
         let displayName: string = this.getAttribute("data-type");
 
-        this.lbl.innerText = displayName+":";
+        this.lbl.innerText = displayName + ":";
         this.val = 0;
         this.valLbl.innerText = this.val.toString();
 
@@ -25,9 +30,9 @@
         this.style.padding = "3px";
         this.style.borderRadius = "10px";
 
-        this.appendChild(this.lbl);
-        this.appendChild(this.constructSpinner());
-        this.appendChild(this.valLbl);
+        shadow.appendChild(this.lbl);
+        shadow.appendChild(this.constructSpinner());
+        shadow.appendChild(this.valLbl);
     }
 
     private constructSpinner() {

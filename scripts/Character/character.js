@@ -8,7 +8,7 @@ define(["require", "exports"], function (require, exports) {
     //4->professional
     //5->expert
     class Character {
-        constructor(intuition = 0, charisma, luck, know_law, know_money, know_religion, know_arms, know_logistics) {
+        constructor(intuition = 0, charisma = 0, luck = 0, know_law = 0, know_money = 0, know_religion = 0, know_arms = 0, know_logistics = 0) {
             this.intuition = intuition;
             this.charisma = charisma;
             this.luck = luck;

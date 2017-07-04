@@ -18,7 +18,7 @@ export class CharacterCreator extends Frame {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-    private attrToDisplayName: HashTable<string> = {
+    private static attrToDisplayName: HashTable<string> = {
         "intuition": "Intuition",
         "charisma": "Charisma",
         "luck": "Luck",
@@ -29,22 +29,25 @@ export class CharacterCreator extends Frame {
         "know_logistics" : "Knowledge Logistics"
     };
 
-    private genAttrWidget(attrName: string): string {
-        let displayStr: string = this.attrToDisplayName[attrName];
-        return `<custom-spinner id="${attrName}" data-type="${displayStr}"> </custom-spinner>`;
+    private genAttrWidget(attrName: string): HTMLElement {
+        let displayStr: string = CharacterCreator.attrToDisplayName[attrName];
+        let spinner: HTMLElement = document.createElement("custom-spinner");
+        spinner.id = attrName;
+        spinner.setAttribute("data-type", displayStr);
+        return spinner;
     }
 
-    public content(): String {
-        let toReturn: string =
-            this.genAttrWidget("intuition") +
-            this.genAttrWidget("charisma") +
-            this.genAttrWidget("luck") +
-            this.genAttrWidget("know_law") +
-            this.genAttrWidget("know_money") +
-            this.genAttrWidget("know_religion") +
-            this.genAttrWidget("know_arms") +
-            this.genAttrWidget("know_logistics");
-        return toReturn;
+    public createContent(): HTMLElement{
+        let box = document.createElement("div");
+        box.appendChild(this.genAttrWidget("intuition"));
+        box.appendChild(this.genAttrWidget("charisma"));
+        box.appendChild(this.genAttrWidget("luck"));
+        box.appendChild(this.genAttrWidget("know_law"));
+        box.appendChild(this.genAttrWidget("know_money"));
+        box.appendChild(this.genAttrWidget("know_religion"));
+        box.appendChild(this.genAttrWidget("know_arms"));
+        box.appendChild(this.genAttrWidget("know_logistics"));
+        return box;
     }
 
     public bindings(): void {

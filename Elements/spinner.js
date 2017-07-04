@@ -4,6 +4,10 @@ define(["require", "exports"], function (require, exports) {
     class Spinner extends HTMLElement {
         constructor() {
             super();
+            this.initSpinner();
+        }
+        initSpinner() {
+            var shadow = this.attachShadow({ mode: 'open' });
             this.lbl = document.createElement("label");
             this.valLbl = document.createElement("label");
             let displayName = this.getAttribute("data-type");
@@ -17,9 +21,9 @@ define(["require", "exports"], function (require, exports) {
             this.style.border = "1px solid grey";
             this.style.padding = "3px";
             this.style.borderRadius = "10px";
-            this.appendChild(this.lbl);
-            this.appendChild(this.constructSpinner());
-            this.appendChild(this.valLbl);
+            shadow.appendChild(this.lbl);
+            shadow.appendChild(this.constructSpinner());
+            shadow.appendChild(this.valLbl);
         }
         constructSpinner() {
             let toReturn = document.createElement("div");

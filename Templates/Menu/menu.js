@@ -2,19 +2,24 @@ define(["require", "exports", "../../scripts/frame", "../CharacterCreator/charac
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Menu extends frame_1.Frame {
-        content() {
-            return `
-    <ol>
-        <li id='test'>New Game</li>
-        <li>Load Game</li>
-        <li>About</li>
-    </ol>
-    `;
+        createContent() {
+            let mainMenu = document.createElement("ol");
+            let newGameOption = document.createElement("li");
+            let loadGameOption = document.createElement("li");
+            let aboutOption = document.createElement("li");
+            newGameOption.textContent = "New Game";
+            newGameOption.id = "test";
+            loadGameOption.textContent = "Load Game";
+            aboutOption.textContent = "About";
+            mainMenu.appendChild(newGameOption);
+            mainMenu.appendChild(loadGameOption);
+            mainMenu.appendChild(aboutOption);
+            return mainMenu;
         }
         bindings() {
             let self = this;
             $("#test").click(function () {
-                self.switchFrame(new characterCreator_1.CharacterCreator());
+                frame_1.Frame.switchFrame(new characterCreator_1.CharacterCreator());
             });
         }
         structureFrame() {

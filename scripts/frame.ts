@@ -1,17 +1,25 @@
-export abstract class Frame {
+export abstract class Frame extends DocumentFragment {
     public static frameBoxID = "main-frame";
 
-    public abstract content(): String;
+    public abstract createContent(): HTMLElement;
     public abstract bindings(): void;
     public abstract structureFrame(): void;
 
-    public static switchFrame(newFrame: Frame): void {
-        document.getElementById(Frame.frameBoxID).innerHTML = newFrame.content().toString();
-        newFrame.structureFrame();
-        newFrame.bindings();
+    public appendContent() {
+        let stuff: HTMLElement = this.createContent();
+        this.appendChild(stuff);
     }
 
-    public switchFrame(newFrame: Frame): void {
-        Frame.switchFrame(newFrame);
+
+    constructor() {
+        super();
+        this.appendContent();
+    }
+
+    public static switchFrame(newFrame: Frame): void {
+        document.getElementById(Frame.frameBoxID).innerHTML = "";
+        document.getElementById(Frame.frameBoxID).appendChild(newFrame);
+        newFrame.structureFrame();
+        newFrame.bindings();
     }
 }
