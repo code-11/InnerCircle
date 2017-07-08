@@ -1,4 +1,4 @@
-define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCreatorModel/characterCreatorModel", "../../Elements/spinner"], function (require, exports, frame_1, characterCreatorModel_1, spinner_1) {
+define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCreatorModel/characterCreatorModel", "../../Elements/Spinner/spinner", "../../scripts/main"], function (require, exports, frame_1, characterCreatorModel_1, spinner_1, main_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class CharacterCreator extends frame_1.Frame {
@@ -9,9 +9,12 @@ define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCre
             this.charPointsLbl = document.createElement("div");
             this.charPointsLbl.innerText = "Character Points: ";
             this.charPoints = document.createElement("div");
+            this.continueBtn = document.createElement("button");
+            this.continueBtn.innerText = "Use Character";
             this.appendChild(this.charPointsLbl);
             this.appendChild(this.charPoints);
             this.appendChild(this.box);
+            this.appendChild(this.continueBtn);
         }
         initializeModel() {
             this.setModel(new characterCreatorModel_1.CharacterCreatorModel());
@@ -65,11 +68,17 @@ define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCre
         }
         bindings() {
             let theModel = this.model;
+            this.continueBtn.onclick = function () {
+                if (theModel.getPoints() == 0) {
+                    console.log("Progressing");
+                }
+            };
             this.intuition.assignDown(() => {
                 if (theModel.canDecrementIntuition()) {
                     theModel.decrementIntuition();
                     this.intuition.setValLbl(theModel.getIntuition());
                     this.updatePoints();
+                    main_1.Game.inst().log("Test");
                 }
             });
             this.intuition.assignUp(() => {
@@ -77,6 +86,7 @@ define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCre
                     theModel.incrementIntuition();
                     this.intuition.setValLbl(theModel.getIntuition());
                     this.updatePoints();
+                    main_1.Game.inst().log("test2");
                 }
             });
             this.charisma.assignDown(() => {

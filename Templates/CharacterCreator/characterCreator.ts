@@ -1,6 +1,7 @@
 ﻿import { Frame } from "../../scripts/frame";
 import { CharacterCreatorModel } from "../../scripts/CharacterCreatorModel/characterCreatorModel";
-import { Spinner } from "../../Elements/spinner";
+import { Spinner } from "../../Elements/Spinner/spinner";
+import { Game } from "../../scripts/main";
 
 interface HashTable<T> {
     [key: string]: T;
@@ -22,6 +23,7 @@ export class CharacterCreator extends Frame {
     private charPoints: HTMLDivElement;
     private charPointsLbl: HTMLDivElement;
 
+    private continueBtn: HTMLButtonElement;
 
     private box: HTMLElement;
 
@@ -32,9 +34,13 @@ export class CharacterCreator extends Frame {
         this.charPointsLbl = document.createElement("div");
         this.charPointsLbl.innerText = "Character Points: ";
         this.charPoints = document.createElement("div");
+        this.continueBtn = document.createElement("button");
+        this.continueBtn.innerText = "Use Character";
+
         this.appendChild(this.charPointsLbl);
         this.appendChild(this.charPoints);
         this.appendChild(this.box);
+        this.appendChild(this.continueBtn);
     }
 
     public initializeModel() {
@@ -108,12 +114,19 @@ export class CharacterCreator extends Frame {
     public bindings(): void {
         let theModel: CharacterCreatorModel = this.model;
 
+        this.continueBtn.onclick = function () {
+            if (theModel.getPoints() == 0) {
+                console.log("Progressing");
+            }
+        }
+
         this.intuition.assignDown(
             () => {
                 if (theModel.canDecrementIntuition()) {
                     theModel.decrementIntuition();
                     this.intuition.setValLbl(theModel.getIntuition());
                     this.updatePoints();
+                    Game.inst().log("Test");
                 }
             }
         )
@@ -123,6 +136,7 @@ export class CharacterCreator extends Frame {
                     theModel.incrementIntuition();
                     this.intuition.setValLbl(theModel.getIntuition());
                     this.updatePoints();
+                    Game.inst().log("test2");
                 }
             }
         )
