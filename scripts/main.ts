@@ -13,7 +13,9 @@ class Startup {
 //https://gist.github.com/olanod/ede8befb771057bb004c4f57be591640/
 $(document).ready(function () {
     Startup.main();
-    Frame.switchFrame(new Menu());
+    let mainMenu: Menu = new Menu();
+    Frame.switchFrame(mainMenu);
+    mainMenu.bindings();
     customElements.define("custom-spinner", Spinner);
     //document.getElementById("main-frame").innerHTML = Menu.menu.toString();
     //Menu.bindings();

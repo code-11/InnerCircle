@@ -2,8 +2,8 @@ define(["require", "exports", "../Character/character"], function (require, expo
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class CharacterCreatorModel {
-        constructor() {
-            this.base = new character_1.Character();
+        constructor(existingCharacter = new character_1.Character()) {
+            this.base = existingCharacter;
             this.points = 10;
         }
         enoughPoints(decr = 0) {
@@ -129,6 +129,27 @@ define(["require", "exports", "../Character/character"], function (require, expo
         }
         getIntuition() {
             return this.base.getIntuition();
+        }
+        getCharisma() {
+            return this.base.getCharisma();
+        }
+        getLuck() {
+            return this.base.getLuck();
+        }
+        getKnowLaw() {
+            return this.base.getKnowLaw();
+        }
+        getKnowMoney() {
+            return this.base.getKnowMoney();
+        }
+        getKnowReligion() {
+            return this.base.getKnowReligion();
+        }
+        getKnowArms() {
+            return this.base.getKnowArms();
+        }
+        getKnowLogistics() {
+            return this.base.getKnowLogistics();
         }
     }
     exports.CharacterCreatorModel = CharacterCreatorModel;

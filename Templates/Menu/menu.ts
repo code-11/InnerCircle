@@ -2,6 +2,11 @@
 import { CharacterCreator } from "../CharacterCreator/characterCreator";
 export class Menu extends Frame {
 
+    constructor() {
+        super();
+        this.appendChild(this.createContent());
+    }
+
     public createContent(): HTMLElement {
         let mainMenu: HTMLElement = document.createElement("ol");
         let newGameOption: HTMLElement = document.createElement("li");
@@ -23,9 +28,12 @@ export class Menu extends Frame {
     }
 
     public bindings(): void {
-        let self = this;
         $("#test").click(function () {
-            Frame.switchFrame(new CharacterCreator());
+            console.log("making character creator");
+            let cc: CharacterCreator = new CharacterCreator();
+            Frame.switchFrame(cc);
+            cc.initializeModel();
+            cc.bindings();
         });
     }
 

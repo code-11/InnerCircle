@@ -7,11 +7,10 @@
 
     constructor() {
         super();
-        this.initSpinner();
     }
 
-    private initSpinner(): void {
-        var shadow = this.attachShadow({ mode: 'open' });
+    private connectedCallback(): void {
+        //var shadow = this.attachShadow({ mode: 'open' });
         this.lbl = document.createElement("label");
         this.valLbl = document.createElement("label");
 
@@ -30,9 +29,9 @@
         this.style.padding = "3px";
         this.style.borderRadius = "10px";
 
-        shadow.appendChild(this.lbl);
-        shadow.appendChild(this.constructSpinner());
-        shadow.appendChild(this.valLbl);
+        this.appendChild(this.lbl);
+        this.appendChild(this.constructSpinner());
+        this.appendChild(this.valLbl);
     }
 
     private constructSpinner() {
@@ -54,6 +53,18 @@
         toReturn.appendChild(this.up);
         toReturn.appendChild(this.down);
         return toReturn;
+    }
+
+    public assignDown(callBack: () => void): void {
+        this.down.onclick = callBack;
+    }
+
+    public assignUp(callBack: () => void): void {
+        this.up.onclick = callBack;
+    }
+
+    public setValLbl(newValue: number): void {
+        this.valLbl.innerText = newValue.toString();
     }
 
     public generateHTML(id: string,displayName: string) {

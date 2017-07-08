@@ -2,6 +2,10 @@ define(["require", "exports", "../../scripts/frame", "../CharacterCreator/charac
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Menu extends frame_1.Frame {
+        constructor() {
+            super();
+            this.appendChild(this.createContent());
+        }
         createContent() {
             let mainMenu = document.createElement("ol");
             let newGameOption = document.createElement("li");
@@ -17,9 +21,12 @@ define(["require", "exports", "../../scripts/frame", "../CharacterCreator/charac
             return mainMenu;
         }
         bindings() {
-            let self = this;
             $("#test").click(function () {
-                frame_1.Frame.switchFrame(new characterCreator_1.CharacterCreator());
+                console.log("making character creator");
+                let cc = new characterCreator_1.CharacterCreator();
+                frame_1.Frame.switchFrame(cc);
+                cc.initializeModel();
+                cc.bindings();
             });
         }
         structureFrame() {

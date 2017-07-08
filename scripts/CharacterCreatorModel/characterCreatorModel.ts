@@ -2,8 +2,8 @@
 export class CharacterCreatorModel {
     private base: Character;
     private points: number;
-    public constructor() {
-        this.base = new Character();
+    public constructor(existingCharacter: Character = new Character()) {
+        this.base = existingCharacter;
         this.points = 10;
     }
 
@@ -165,5 +165,26 @@ export class CharacterCreatorModel {
 
     public getIntuition(): number {
         return this.base.getIntuition();
+    }
+    public getCharisma(): number {
+        return this.base.getCharisma();
+    }
+    public getLuck(): number {
+        return this.base.getLuck();
+    }
+    public getKnowLaw(): number {
+        return this.base.getKnowLaw();
+    }
+    public getKnowMoney(): number {
+        return this.base.getKnowMoney();
+    }
+    public getKnowReligion(): number {
+        return this.base.getKnowReligion();
+    }
+    public getKnowArms(): number {
+        return this.base.getKnowArms();
+    }
+    public getKnowLogistics(): number {
+        return this.base.getKnowLogistics();
     }
 }
