@@ -1,7 +1,6 @@
 ﻿import { Frame } from "../../scripts/frame";
 import { CharacterCreatorModel } from "../../scripts/CharacterCreatorModel/characterCreatorModel";
 import { Spinner } from "../../Elements/Spinner/spinner";
-import { Game } from "../../scripts/main";
 
 interface HashTable<T> {
     [key: string]: T;
@@ -126,7 +125,6 @@ export class CharacterCreator extends Frame {
                     theModel.decrementIntuition();
                     this.intuition.setValLbl(theModel.getIntuition());
                     this.updatePoints();
-                    Game.inst().log("Test");
                 }
             }
         )
@@ -136,7 +134,6 @@ export class CharacterCreator extends Frame {
                     theModel.incrementIntuition();
                     this.intuition.setValLbl(theModel.getIntuition());
                     this.updatePoints();
-                    Game.inst().log("test2");
                 }
             }
         )

@@ -1,4 +1,4 @@
-define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCreatorModel/characterCreatorModel", "../../Elements/Spinner/spinner", "../../scripts/main"], function (require, exports, frame_1, characterCreatorModel_1, spinner_1, main_1) {
+define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCreatorModel/characterCreatorModel", "../../Elements/Spinner/spinner"], function (require, exports, frame_1, characterCreatorModel_1, spinner_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class CharacterCreator extends frame_1.Frame {
@@ -78,7 +78,6 @@ define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCre
                     theModel.decrementIntuition();
                     this.intuition.setValLbl(theModel.getIntuition());
                     this.updatePoints();
-                    main_1.Game.inst().log("Test");
                 }
             });
             this.intuition.assignUp(() => {
@@ -86,7 +85,6 @@ define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCre
                     theModel.incrementIntuition();
                     this.intuition.setValLbl(theModel.getIntuition());
                     this.updatePoints();
-                    main_1.Game.inst().log("test2");
                 }
             });
             this.charisma.assignDown(() => {

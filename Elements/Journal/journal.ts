@@ -5,13 +5,12 @@ export class Journal extends HTMLElement {
     }
 
     private connectedCallback(): void {
+        this.style.display ="block"
         this.style.overflowY = "scroll";
-        this.style.position = "fixed";
         this.style.width = "100%";
-        this.style.bottom = "0";
-        this.style.left = "0";
         this.style.border = "1px solid grey";
-        this.style.maxHeight = "20%"
+        this.id = "journal";
+        //this.style.maxHeight = "20%"
     }
 
     public log(line: string): void{
