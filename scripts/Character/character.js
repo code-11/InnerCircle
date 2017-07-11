@@ -18,6 +18,11 @@ define(["require", "exports"], function (require, exports) {
             this.know_arms = know_arms;
             this.know_logistics = know_logistics;
         }
+        static createRandomCharacter() {
+            //let toReturn: Character = new Character();
+            //toReturn.
+            return null;
+        }
         getIntuition() {
             return this.intuition;
         }

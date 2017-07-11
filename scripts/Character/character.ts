@@ -1,3 +1,4 @@
+import { RandomUtils } from "../Utils/randomUtils";
 //0->untrained
 //1->novice
 //2->some training
@@ -18,6 +19,7 @@ export class Character {
     private rank: number;
     private favor: number;
     private honor: number;
+    private fame: number;
     private money: number;
     private men: number;
 
@@ -39,6 +41,20 @@ export class Character {
         this.know_religion = know_religion;
         this.know_arms = know_arms;
         this.know_logistics = know_logistics;
+    }
+
+    public static createRandomCharacter(points: number = 10): Character {
+        let scores: Array<number> = RandomUtils.constrainedAdditive(8, points);
+        let toReturn: Character = new Character();
+        toReturn.intuition = scores[0];
+        toReturn.charisma = scores[1];
+        toReturn.luck = scores[2];
+        toReturn.know_law = scores[3];
+        toReturn.know_money = scores[4];
+        toReturn.know_religion = scores[5];
+        toReturn.know_arms = scores[6];
+        toReturn.know_logistics = scores[7];
+        return toReturn;
     }
 
     public getIntuition(): number {
