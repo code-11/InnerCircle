@@ -4,6 +4,7 @@ define(["require", "exports"], function (require, exports) {
     class Journal extends HTMLElement {
         constructor() {
             super();
+            Journal.the = this;
         }
         connectedCallback() {
             this.style.display = "block";
@@ -12,6 +13,7 @@ define(["require", "exports"], function (require, exports) {
             this.style.border = "1px solid grey";
             this.id = "journal";
             //this.style.maxHeight = "20%"
+            this.log("Initializing...");
         }
         log(line) {
             let lineEl = document.createElement("p");

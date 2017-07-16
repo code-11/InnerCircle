@@ -26,5 +26,10 @@ customElements.define("custom-journal", Journal);
 document.body.style.margin = "0px";
 document.documentElement.style.height = "100vh";
 document.body.style.height = "100vh";
+document.body.style.width = "100vw";
 document.body.style.position = "fixed";
+
+let theJournal: Journal = new Journal();
+document.body.appendChild(theJournal);
+
 Main.main();

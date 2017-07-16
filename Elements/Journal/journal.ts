@@ -1,7 +1,10 @@
 export class Journal extends HTMLElement {
 
+    public static the: Journal;
+
     constructor() {
         super();
+        Journal.the = this;
     }
 
     private connectedCallback(): void {
@@ -11,6 +14,7 @@ export class Journal extends HTMLElement {
         this.style.border = "1px solid grey";
         this.id = "journal";
         //this.style.maxHeight = "20%"
+        this.log("Initializing...");
     }
 
     public log(line: string): void{
