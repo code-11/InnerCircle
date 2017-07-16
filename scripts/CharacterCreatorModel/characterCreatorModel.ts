@@ -7,6 +7,10 @@ export class CharacterCreatorModel {
         this.points = 10;
     }
 
+    public getResult(): Character {
+        return this.base;
+    }
+
     private enoughPoints(decr: number = 0): boolean {
         return !(this.points - decr < 0);
     }

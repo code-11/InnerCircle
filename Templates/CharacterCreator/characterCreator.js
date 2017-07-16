@@ -1,4 +1,4 @@
-define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCreatorModel/characterCreatorModel", "../../Elements/Spinner/spinner"], function (require, exports, frame_1, characterCreatorModel_1, spinner_1) {
+define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCreatorModel/characterCreatorModel", "../../Elements/Spinner/spinner", "../../Elements/Journal/journal"], function (require, exports, frame_1, characterCreatorModel_1, spinner_1, journal_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class CharacterCreator extends frame_1.Frame {
@@ -70,7 +70,7 @@ define(["require", "exports", "../../scripts/frame", "../../scripts/CharacterCre
             let theModel = this.model;
             this.continueBtn.onclick = function () {
                 if (theModel.getPoints() == 0) {
-                    console.log("Progressing");
+                    journal_1.Journal.the.log(theModel.getResult().toString());
                 }
             };
             this.intuition.assignDown(() => {

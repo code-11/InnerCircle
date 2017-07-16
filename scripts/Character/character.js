@@ -31,6 +31,16 @@ define(["require", "exports", "../Utils/randomUtils"], function (require, export
             toReturn.know_logistics = scores[7];
             return toReturn;
         }
+        toString() {
+            return "Intuition:" + this.intuition + "\n" +
+                "Charisma:" + this.charisma + "\n" +
+                "Luck:" + this.luck + "\n" +
+                "Knowledge Law:" + this.know_law + "\n" +
+                "Knowledge Money:" + this.know_money + "\n" +
+                "Knowledge Religion:" + this.know_religion + "\n" +
+                "Knowledge Arms:" + this.know_arms + "\n" +
+                "Knowledge Logistics:" + this.know_logistics;
+        }
         getIntuition() {
             return this.intuition;
         }

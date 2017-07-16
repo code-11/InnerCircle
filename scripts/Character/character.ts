@@ -57,6 +57,16 @@ export class Character {
         return toReturn;
     }
 
+    public toString(): string{
+        return "Intuition:" + this.intuition + "\n" +
+            "Charisma:" + this.charisma + "\n" +
+            "Luck:" + this.luck + "\n" +
+            "Knowledge Law:" + this.know_law + "\n" +
+            "Knowledge Money:" + this.know_money + "\n" +
+            "Knowledge Religion:" + this.know_religion + "\n" +
+            "Knowledge Arms:" + this.know_arms + "\n" +
+            "Knowledge Logistics:" + this.know_logistics;
+    }
     public getIntuition(): number {
         return this.intuition;
     }

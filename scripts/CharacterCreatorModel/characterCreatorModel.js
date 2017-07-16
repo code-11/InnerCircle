@@ -6,6 +6,9 @@ define(["require", "exports", "../Character/character"], function (require, expo
             this.base = existingCharacter;
             this.points = 10;
         }
+        getResult() {
+            return this.base;
+        }
         enoughPoints(decr = 0) {
             return !(this.points - decr < 0);
         }

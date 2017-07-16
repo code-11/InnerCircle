@@ -1,6 +1,7 @@
 ﻿import { Frame } from "../../scripts/frame";
 import { CharacterCreatorModel } from "../../scripts/CharacterCreatorModel/characterCreatorModel";
 import { Spinner } from "../../Elements/Spinner/spinner";
+import { Journal } from "../../Elements/Journal/journal";
 
 interface HashTable<T> {
     [key: string]: T;
@@ -115,7 +116,7 @@ export class CharacterCreator extends Frame {
 
         this.continueBtn.onclick = function () {
             if (theModel.getPoints() == 0) {
-                console.log("Progressing");
+                Journal.the.log(theModel.getResult().toString());
             }
         }
 
