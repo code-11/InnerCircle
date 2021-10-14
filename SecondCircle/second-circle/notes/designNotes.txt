@@ -1,0 +1,18 @@
+- You play as a rising noble in the kings court
+- You have to prove your worth to the king and other advisors
+- External factors and enemies will try to unsettle your progress
+
+
+- Possible agent simulation
+    -Attributes:
+        -alive (Special)
+        -catechesis
+        -bulwark
+        -academia
+        -wealth
+        -wordcraft
+        -precepts
+
+    -dynamic state:
+        -holdings
+        -relations, including overlordship
