@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { fakePareto } from './Utilities';
 import {rndAgent} from './Agent';
+import {NationBuilder} from "./NationBuilder";
 
 function App() {
   return (
@@ -9,11 +10,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <input type="button" onClick={()=>{
-          const arr=[];
-          for (let i=0;i<100;i+=1){
-            arr.push(rndAgent());
-          }
-          console.log(arr.map((agt)=>agt.toString()));
+          (new NationBuilder()).createCitizenry();
         }}/>
         <p>
           Edit <code>src/App.js</code> and save to reload.

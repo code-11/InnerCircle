@@ -1,3 +1,20 @@
+export const pairwise = <T>(arr: T[])=>{
+    const toReturn = [];
+    for(var i=0; i < arr.length - 1; i++){
+        toReturn.push([arr[i], arr[i + 1]]);
+    }
+    return toReturn;
+}
+
+export const copy = (obj : any)=>{
+    return Object.assign({}, obj);
+    
+}
+
+export const choose = (inputArr:any[])=>{
+    return inputArr[getRandomInt(inputArr.length)];
+}
+
 export const getRandomInt = (max: number)=>{
     return Math.floor(Math.random() * max);
   }
