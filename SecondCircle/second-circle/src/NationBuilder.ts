@@ -5,18 +5,21 @@ export class NationBuilder{
     
     citizens : Array<Agent> = [];
 
+    leader : Agent|null = null;
+
+
     constructor(){}
 
-    static plutocracy = {
-        marriageSort : (a:Agent,b:Agent)=>Math.sign(a.stats.wealth-b.stats.wealth)
+    static plutocracy : any = {
+        leaderSort : (a:Agent,b:Agent)=>Math.sign(b.stats.wealth-a.stats.wealth),
     }
 
     static meritocracy = {
-        marriageSort : (a:Agent,b:Agent)=>Math.sign(a.capability()-b.capability())
+        leaderSort : (a:Agent,b:Agent)=>Math.sign(b.capability()-a.capability())
     }
 
     static gerontocracy = {
-        marriageSort : (a:Agent,b:Agent)=>Math.sign(a.age-b.age)
+        leaderSort : (a:Agent,b:Agent)=>Math.sign(b.age-a.age)
     }
 
 
@@ -26,7 +29,9 @@ export class NationBuilder{
             this.citizens.push(rndAgent());
         }
         const tempCitizens=this.citizens.slice();
-        tempCitizens.sort(NationBuilder.plutocracy.marriageSort);
+        tempCitizens.sort(NationBuilder.plutocracy.leaderSort);
+
+        console.log(tempCitizens.slice().map((ag)=>ag.toString()));
 
         const marriages=[];
         while (tempCitizens.length > 0){

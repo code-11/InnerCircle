@@ -33,7 +33,7 @@ export const rndAgent=(name:string|null=null, title:string="Commoner")=>{
     const wordcraft=triangleProb(1,10);
     const precepts=triangleProb(1,10);
     const age = getRandomInt(50)+fakePareto(0,50,3);
-    const wealth = (age>13) ? fakePareto(1,10000,4) : triangleProb(1,10);
+    const wealth = (age>13) ? fakePareto(1,7000,5) : triangleProb(1,10);
 
     const sex = Math.random() >.5 ? "M" : "F";
 
@@ -49,12 +49,12 @@ export const rndAgent=(name:string|null=null, title:string="Commoner")=>{
 
 export const marriageScore=(a :Agent, b:Agent)=>{
     const desireScore = Math.min(a.desireToMarry,b.desireToMarry) * 3; //0-300
-    const sexScore= a.sex !== b.sex ? 90 : 10;
-    const absoluteAge = (a.age > 13 && b.age > 13) ? 100 : 0;
-    const ageScore = 100-Math.abs(a.age-b.age);
-    const moneyScore =Math.abs(100 - (Math.log10(Math.abs(a.stats.wealth-b.stats.wealth))*50));
-    const wordScore = Math.max(a.stats.wordcraft,b.stats.wordcraft) * 10;
-    const preceptsScore = Math.sign(a.stats.precepts===0 ? 1 : a.stats.precepts) === Math.sign(b.stats.precepts===0 ? 1 : b.stats.precepts) ? 100 : 0;
+    const sexScore= a.sex !== b.sex ? 90 : 10; //10 or 90
+    const absoluteAge = (a.age > 13 && b.age > 13) ? 0 : -Infinity; // 0 or -Inf
+    const ageScore = (100-Math.abs(a.age-b.age))*2; //0-200
+    const moneyScore =Math.abs(200 - (Math.floor(Math.log10(Math.abs(a.stats.wealth-b.stats.wealth)+.001))*50)); //200
+    const wordScore = Math.max(a.stats.wordcraft,b.stats.wordcraft) * 10; //100
+    const preceptsScore = Math.sign(a.stats.precepts===0 ? 1 : a.stats.precepts) === Math.sign(b.stats.precepts===0 ? 1 : b.stats.precepts) ? 100 : 0; // 0 or 100
     return desireScore + sexScore + absoluteAge + ageScore + moneyScore + wordScore + preceptsScore;
 
 }
