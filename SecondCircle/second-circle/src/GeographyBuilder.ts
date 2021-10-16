@@ -1,4 +1,4 @@
-import { getRandomInt,pairwise } from './Utilities';
+import { getRandomInt,pairwise,choose } from './Utilities';
 
 export enum TileType {
     Dirt , RichSoil , DryDirt , Scrub , Tree , Rock , Water, Bridge ,Wall ,Building
@@ -7,7 +7,7 @@ export const tileToColor  = (tileType: TileType)=>{
 
     const tileMap : {[key in TileType]: string}=
     {
-        [TileType.Dirt]: "brown",
+        [TileType.Dirt]: "#5C4033", //Dark Brown
         [TileType.RichSoil]: "brown",
         [TileType.DryDirt]: "brown",
         [TileType.Scrub]: "lightgreen",
@@ -24,6 +24,25 @@ export const tileToColor  = (tileType: TileType)=>{
 export type Tile={
     tileType:TileType,
     point: number[],
+}
+
+export const neighbors=(x:number,y:number)=>{
+    return [[x,y-1],[x+1,y],[x,y+1],[x-1,y]];
+}
+
+export const floodFill=(x:number, y:number, type:TileType, tileMap:{[key: string]:Tile})=>{
+    let toExpand=[[x,y]];
+    const seenPts= new Set();
+    while (toExpand.length>0){
+        const curPt=toExpand.shift();
+        if (curPt && !seenPts.has(ptKey(curPt)) && tileMap[ptKey(curPt)] &&  tileMap[ptKey(curPt)].tileType!==type){
+            tileMap[ptKey(curPt)].tileType=type;
+            seenPts.add(ptKey(curPt));
+            //Only keep the points inside the map
+            const curNeighbors=neighbors(curPt[0],curPt[1]).filter((nPt)=>tileMap[ptKey(nPt)]!==undefined);
+            toExpand=toExpand.concat(curNeighbors);
+        }
+    }
 }
 
 export const line=(x1:number,y1:number,x2:number,y2:number)=>{
@@ -73,16 +92,34 @@ export class GeographyBuilder{
                 previousY=possibleNext;
             }
         }
-        rndMtLinePoints.push([this.width,endHeight]);
+        rndMtLinePoints.push([this.width-1,endHeight]);
         let allMtPoints : number[][]=[];
         const pairwiseMtPoints=pairwise(rndMtLinePoints);
         pairwiseMtPoints.forEach((ptPair)=>{
             const p1=ptPair[0];
             const p2=ptPair[1];
-            const linePoints=line(p1[0],p1[1],p2[0],p2[1]);
-            allMtPoints=allMtPoints.concat(linePoints);
+            const linePoints=line(p1[0],p1[1]+5,p2[0],p2[1]+5);
+            const linePointsB=line(p1[0],p1[1]+6,p2[0],p2[1]+6);
+            const linePointsC=line(p1[0],p1[1]+7,p2[0],p2[1]+7);
+            allMtPoints=allMtPoints.concat(linePoints).concat(linePointsB).concat(linePointsC);
         });
         return allMtPoints.map((pt)=>{return {point: pt,tileType:TileType.Rock}});
+    }
+
+    createRiver(){
+        const possibleEndpoints=[];
+        for(let i=this.height/2;i<this.height-1;i+=1){
+            possibleEndpoints.push([0,i]);
+        }
+        for(let i=0;i<this.width;i+=1){
+            possibleEndpoints.push([i,this.height-1]);
+        }
+        for(let i=this.height/2;i<this.height-1;i+=1){
+            possibleEndpoints.push([this.width-1,i]);
+        }
+        const endPoint= choose(possibleEndpoints);
+        
+
     }
 
     createLocalmap(){
@@ -100,15 +137,18 @@ export class GeographyBuilder{
                 }
             }
         }
+
+        floodFill(0,0,TileType.Rock,tileMap);
+
         return Object.values(tileMap).sort((v1,v2)=>{
-            if (v1.point[1]<v2.point[1]){
+            if (v2.point[1]<v1.point[1]){
                 return 1;
-            }else if (v2.point[1] < v1.point[1]){
+            }else if (v1.point[1] < v2.point[1]){
                 return -1;
             }else{
-                if (v1.point[0]<v2.point[0]){
+                if (v2.point[0]<v1.point[0]){
                     return 1;
-                }else if (v2.point[0]<v1.point[0]){
+                }else if (v1.point[0]<v2.point[0]){
                     return -1;
                 }else{
                     return 0;
