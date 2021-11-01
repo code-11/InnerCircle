@@ -1,8 +1,6 @@
 import './App.css';
-import { fakePareto } from './Utilities';
-import {rndAgent} from './Agent';
 import {NationBuilder} from "./NationBuilder";
-import {GeographyBuilder, line, Tile} from "./GeographyBuilder";
+import {GeographyBuilder} from "./GeographyBuilder";
 import LocalMap from './LocalMap';
 import { Component } from 'react';
 

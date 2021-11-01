@@ -187,7 +187,7 @@ export class GeographyBuilder{
         
         //Now we have start and end points. Iterate midpoint drifting.
         const midpointDrift=(start:number[],end : number[],depth: number=0)=>{
-            if (depth==4){
+            if (depth===4){
                 return line(start[0],start[1],end[0],end[1]);
             }else{
                 const midPt=midpoint(start,end);
@@ -224,15 +224,15 @@ export class GeographyBuilder{
 
     muddyWaters(tileMap: {[key: string]:Tile} ){
         const waterTiles= [];
-        for (const [key, value] of Object.entries(tileMap)) {
-            if (value.tileType == TileType.Water){
+        for (const value of Object.values(tileMap)) {
+            if (value.tileType === TileType.Water){
                 waterTiles.push(value);
             }
         }
 
         const insideAndDirt =(pt : number[])=>{
             const tile = tileMap[ptKey(pt)];
-            return tile!=undefined && tile.tileType == TileType.Dirt;
+            return tile!==undefined && tile.tileType === TileType.Dirt;
         }
 
         const seenTiles: Set<number[]> = new Set();
@@ -260,28 +260,28 @@ export class GeographyBuilder{
     createForests(tileMap: {[key: string]:Tile}){
         const treeable = (pt:number[]) =>{
             const tile = tileMap[ptKey(pt)];
-            if (tile.tileType ==TileType.Dirt){
+            if (tile.tileType ===TileType.Dirt){
                 return true;
             }else{
                 return false;
             }
         }
         const createTree=(pt:number[])=>{
-            const curNeighborTree=neighbors(pt[0],pt[1]).filter((nPt)=>tileMap[ptKey(nPt)]!==undefined && tileMap[ptKey(nPt)].tileType==TileType.Tree);
-            const numNeighborTree= curNeighborTree.length;
-            const neighborValue = (90/4) * numNeighborTree;
+            // const curNeighborTree=neighbors(pt[0],pt[1]).filter((nPt)=>tileMap[ptKey(nPt)]!==undefined && tileMap[ptKey(nPt)].tileType==TileType.Tree);
+            // const numNeighborTree= curNeighborTree.length;
+            // const neighborValue = (25/4) * numNeighborTree;
             const prob=getRandomInt(100);
-            return prob < neighborValue;
+            return prob < 60;
         }
         const createStand=(pt: number[])=>{
             let toExpand=[[pt[0],pt[1]]];
             const seenPts= new Set();
             while (toExpand.length>0){
                 const curPt=toExpand.shift();
-                if ((curPt && !seenPts.has(ptKey(curPt)) && tileMap[ptKey(curPt)] &&  treeable(curPt))|| (curPt && toExpand.length==0)){
+                if ((curPt && !seenPts.has(ptKey(curPt)) && tileMap[ptKey(curPt)] &&  treeable(curPt))){
                     seenPts.add(ptKey(curPt));
 
-                    if (createTree(curPt)){
+                    if (createTree(curPt) || seenPts.size===1){
                         tileMap[ptKey(curPt)].tileType=TileType.Tree;
                         //Only keep the points inside the map
                         const curNeighbors=neighbors(curPt[0],curPt[1]).filter((nPt)=>tileMap[ptKey(nPt)]!==undefined);
@@ -295,9 +295,7 @@ export class GeographyBuilder{
         while(successfulStands<6){
             const x = getRandomInt(this.width);
             const y = getRandomInt(this.width);
-            const tile = tileMap[ptKey([x,y])];
             if (treeable([x,y])){
-                tile.tileType=TileType.Tree;
                 createStand([x,y]);
                 successfulStands+=1;
             }

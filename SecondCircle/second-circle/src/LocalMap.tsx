@@ -12,7 +12,7 @@ export default class LocalMap extends React.Component{
 
     render(){
         const {mapData}=this.props;
-        if (mapData==undefined){
+        if (mapData===undefined){
             return null;
         }else{
             const tileElements=mapData.map((tile:Tile)=>{
