@@ -7,8 +7,8 @@ export const tileToColor  = (tileType: TileType)=>{
 
     const tileMap : {[key in TileType]: string}=
     {
-        [TileType.Dirt]: "#5C4033", //Dark Brown
-        [TileType.RichSoil]: "brown",
+        [TileType.Dirt]: "#8a745a", //Brown
+        [TileType.RichSoil]: "#5C4033", // Dark Brown
         [TileType.DryDirt]: "brown",
         [TileType.Scrub]: "lightgreen",
         [TileType.Tree]: "green",
@@ -222,6 +222,91 @@ export class GeographyBuilder{
         // return [possibleStartPoint,drift[0],drift[1],endPoint];
     }
 
+    muddyWaters(tileMap: {[key: string]:Tile} ){
+        const waterTiles= [];
+        for (const [key, value] of Object.entries(tileMap)) {
+            if (value.tileType == TileType.Water){
+                waterTiles.push(value);
+            }
+        }
+
+        const insideAndDirt =(pt : number[])=>{
+            const tile = tileMap[ptKey(pt)];
+            return tile!=undefined && tile.tileType == TileType.Dirt;
+        }
+
+        const seenTiles: Set<number[]> = new Set();
+        const seenTiles2: Set<number[]> = new Set();
+        const seenTiles3: Set<number[]> = new Set();
+        waterTiles.forEach((tile)=>{
+            const curNeighbors=neighbors(tile.point[0],tile.point[1]).filter(insideAndDirt);
+            curNeighbors.forEach((pt)=>{
+                seenTiles.add(pt);
+            });
+        });
+        seenTiles.forEach((pt)=>{
+            const n2=neighbors(pt[0],pt[1]).filter(insideAndDirt).filter((pt)=>!seenTiles2.has(pt));
+            seenTiles2.add(pt);
+            n2.forEach((pt)=>seenTiles2.add(pt));
+        });
+        seenTiles2.forEach((pt)=>{
+            const n3=neighbors(pt[0],pt[1]).filter(insideAndDirt).filter((pt)=>!seenTiles3.has(pt));
+            seenTiles3.add(pt);
+            n3.forEach((pt)=>seenTiles3.add(pt));
+        });
+        seenTiles3.forEach((pt)=>tileMap[ptKey(pt)].tileType=TileType.RichSoil);
+    }
+
+    createForests(tileMap: {[key: string]:Tile}){
+        const treeable = (pt:number[]) =>{
+            const tile = tileMap[ptKey(pt)];
+            if (tile.tileType ==TileType.Dirt){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        const createTree=(pt:number[])=>{
+            const curNeighborTree=neighbors(pt[0],pt[1]).filter((nPt)=>tileMap[ptKey(nPt)]!==undefined && tileMap[ptKey(nPt)].tileType==TileType.Tree);
+            const numNeighborTree= curNeighborTree.length;
+            const neighborValue = (90/4) * numNeighborTree;
+            const prob=getRandomInt(100);
+            return prob < neighborValue;
+        }
+        const createStand=(pt: number[])=>{
+            let toExpand=[[pt[0],pt[1]]];
+            const seenPts= new Set();
+            while (toExpand.length>0){
+                const curPt=toExpand.shift();
+                if ((curPt && !seenPts.has(ptKey(curPt)) && tileMap[ptKey(curPt)] &&  treeable(curPt))|| (curPt && toExpand.length==0)){
+                    seenPts.add(ptKey(curPt));
+
+                    if (createTree(curPt)){
+                        tileMap[ptKey(curPt)].tileType=TileType.Tree;
+                        //Only keep the points inside the map
+                        const curNeighbors=neighbors(curPt[0],curPt[1]).filter((nPt)=>tileMap[ptKey(nPt)]!==undefined);
+                        toExpand=toExpand.concat(curNeighbors);
+                    }
+                }
+            }
+        }
+
+        let successfulStands=0;
+        while(successfulStands<6){
+            const x = getRandomInt(this.width);
+            const y = getRandomInt(this.width);
+            const tile = tileMap[ptKey([x,y])];
+            if (treeable([x,y])){
+                tile.tileType=TileType.Tree;
+                createStand([x,y]);
+                successfulStands+=1;
+            }
+        }
+
+
+
+    }
+
     createLocalmap(){
         const mtTiles=this.createMountain();
         const tileMap:{[key: string]:Tile}={};
@@ -248,7 +333,10 @@ export class GeographyBuilder{
             catch{
                 console.log("herp!");
             }
-        })
+        });
+
+        this.muddyWaters(tileMap);
+        this.createForests(tileMap);
 
         return Object.values(tileMap).sort((v1,v2)=>{
             if (v2.point[1]<v1.point[1]){
