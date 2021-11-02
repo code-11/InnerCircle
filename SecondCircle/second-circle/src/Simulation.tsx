@@ -1,5 +1,6 @@
 import { Jobs, Unemployed } from "./Job";
 import { NationBuilder } from "./NationBuilder";
+import { choose } from "./Utilities";
 
 export default class Simulation{
 
@@ -19,10 +20,23 @@ export default class Simulation{
                     if (bestValue<value){
                         bestChoice = job;
                         bestValue= value;
+                    }else if (bestValue===value){
+                        if(choose([true,false])){
+                            bestChoice = job;
+                            bestValue= value;
+                        }
                     }    
                 });
                 citizen.job=bestChoice;
             } 
+        }
+    }
+
+    
+
+    step(){
+        for(const citizen of this.nation.citizens){ 
+            
         }
     }
 };

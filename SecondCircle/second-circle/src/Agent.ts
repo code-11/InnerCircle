@@ -11,7 +11,8 @@ export enum Stat{
     Academia,
     Wealth,
     Wordcraft,
-    Precepts
+    Precepts,
+    Health,
 }
 export interface AgentStats{
     Favor : number;
@@ -20,10 +21,11 @@ export interface AgentStats{
     Wealth : number;
     Wordcraft : number;
     Precepts : number;
+    Health: number;
 }
 
 const agentStatsToString=(input:AgentStats)=>{
-    return `[${input.Favor} ${input.Bulwark} ${input.Academia} ${input.Wordcraft} ${input.Precepts} ${input.Wealth}]`;
+    return `[${input.Favor} ${input.Bulwark} ${input.Academia} ${input.Wordcraft} ${input.Precepts} ${input.Wealth} ${input.Health}]`;
 }
 
 const rndName=(sex: Sex)=>{
@@ -51,7 +53,7 @@ export const rndAgent=(id:number,name:string|null=null, title:string="Commoner")
     const nameToUse= name ? name : rndName(sex);
  
     return new Agent(id,nameToUse,title,age,sex, desireToMarry,{
-        Favor:favor, Bulwark:bulwark, Academia:academia, Wealth:wealth, Wordcraft:wordcraft, Precepts:precepts
+        Favor:favor, Bulwark:bulwark, Academia:academia, Wealth:wealth, Wordcraft:wordcraft, Precepts:precepts, Health: 100
     });
 }
 
@@ -89,6 +91,7 @@ export default class Agent{
         Wealth: 5,
         Wordcraft: 5,
         Precepts: 5,
+        Health: 100,
     };
 
     constructor(id: number, name : string, title:string, age:number, sex: Sex, desireToMarry:number, stats:AgentStats){

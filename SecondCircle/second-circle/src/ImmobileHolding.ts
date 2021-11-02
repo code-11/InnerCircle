@@ -1,4 +1,3 @@
-import { tsConstructorType } from "@babel/types";
 import BoundValue from "./BoundValue"
 export default class ImmobileHolding{
     size= new BoundValue(1,100,1);

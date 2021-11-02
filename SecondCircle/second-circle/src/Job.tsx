@@ -1,5 +1,6 @@
 import Agent, { Stat } from "./Agent";
 import Identifiable from "./Identifiable";
+import {Commodity} from "./Commodities";
 
 export default abstract class Job implements Identifiable<Job>{
     name: String;
@@ -20,6 +21,10 @@ export default abstract class Job implements Identifiable<Job>{
         return this.name;
     }
 
+    produces(){
+        return {};
+    }
+
     abstract estimateGoodness(person:Agent) : number;
     //abstract perform(): void;
 }
@@ -30,6 +35,19 @@ export class Unemployed extends Job{
     }
     estimateGoodness(person:Agent) : number{
         return 0+(person.age>13 ? 0 : 100);
+    }
+}
+
+export class Lumberjack extends Job{
+    constructor(){
+        super("Lumberjack");
+    }
+    estimateGoodness(person:Agent){
+        //from -13.5 to 100
+        return person.stats.Bulwark * 6.66;
+    }
+    produces(){
+        return {[Commodity.Lumber]:4};
     }
 }
 
@@ -55,6 +73,9 @@ export class Hunter extends Job{
         //from -13.5 to 100
         return person.stats.Bulwark * 6.66;
     }
+    produces(){
+        return {[Commodity.Food]: 6};
+    }
 }
 
 export class Farmer extends Job{
@@ -64,6 +85,10 @@ export class Farmer extends Job{
     estimateGoodness(person:Agent){
         return person.stats.Bulwark * 3.33;
     }
+    produces(){
+        return {[Commodity.Food]: 4};
+    }
+
 }
 
 export class Administrator extends Job{
@@ -78,6 +103,7 @@ export class Administrator extends Job{
 export const Jobs={
     Hunter: new Hunter(), 
     Farmer: new Farmer(),
+    Lumberjack: new Lumberjack(),
     Administrator: new Administrator(), 
     Carpenter: new Carpenter(),
     Unemployed: new Unemployed(),
