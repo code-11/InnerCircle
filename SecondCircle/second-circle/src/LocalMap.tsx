@@ -12,14 +12,14 @@ export default class LocalMap extends React.Component{
 
     render(){
         const {mapData}=this.props;
-        if (mapData===undefined){
+        if (mapData==undefined){
             return null;
         }else{
-            const tileElements=mapData.map((tile:Tile)=>{
+            const tileElements=mapData.map((tile:Tile, i:number)=>{
                 const styleObj={
                     backgroundColor:tileToColor(tile.tileType)
                 }
-                return <div className="local-map-tile" style={styleObj}/>
+                return <div key={i} className="local-map-tile" style={styleObj}/>
             })
             return  <div className="local-map-container">
                 {tileElements}

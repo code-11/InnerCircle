@@ -1,17 +1,22 @@
 import Agent, { rndAgent, marriageScore } from "./Agent";
-import {copy, pairwise} from "./Utilities";
+import { Jobs } from "./Job";
+
+type MarriageData={[key:number]:{citizen:Agent,other:Agent | null,score:number}};
 
 export class NationBuilder{
-    
+
     citizens : Array<Agent> = [];
 
     leader : Agent|null = null;
 
+    marriages : MarriageData = {};
 
-    constructor(){}
+    constructor(){
+        this.createCitizenry();
+    }
 
     static plutocracy : any = {
-        leaderSort : (a:Agent,b:Agent)=>Math.sign(b.stats.wealth-a.stats.wealth),
+        leaderSort : (a:Agent,b:Agent)=>Math.sign(b.stats.Wealth-a.stats.Wealth),
     }
 
     static meritocracy = {
@@ -26,14 +31,17 @@ export class NationBuilder{
     createCitizenry(){
         //Create some people
         for (let i=0;i<100;i+=1){
-            this.citizens.push(rndAgent());
+            this.citizens.push(rndAgent(i));
         }
         const tempCitizens=this.citizens.slice();
         tempCitizens.sort(NationBuilder.plutocracy.leaderSort);
 
-        console.log(tempCitizens.slice().map((ag)=>ag.toString()));
+        tempCitizens[0].job = Jobs.Administrator;
+        tempCitizens[0].title="Leader";
 
-        const marriages=[];
+        // console.log(tempCitizens.slice().map((ag)=>ag.toString()));
+
+        const marriages : MarriageData={};
         while (tempCitizens.length > 0){
             const citizen=tempCitizens.shift();
             if (citizen){
@@ -42,14 +50,14 @@ export class NationBuilder{
                 if (marriageScores.length > 0){
                     const proposedMatch= marriageScores.shift();
                     if (proposedMatch && proposedMatch.score >200){
-                        marriages.push([citizen,proposedMatch.citizen,proposedMatch.score]);
+                        marriages[citizen.id]={citizen, other: proposedMatch.citizen, score:proposedMatch.score};
                     }else{
-                        marriages.push([citizen,0]);
+                        marriages[citizen.id]={citizen, other: null, score:0};
                     }
                 }
             }
         }
-        console.log(marriages);
+        this.marriages=marriages;
 
         // var combos = tempCitizens.flatMap(
         //     (v: Agent, i: number) => tempCitizens.slice(i+1).map( (w:Agent) => [v,w] )
