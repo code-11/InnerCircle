@@ -10,6 +10,6 @@ export class market{
     depanders : Array<{agent:Agent,print:number,amnt:number}>=[];
 
     addSupplier(agent:Agent,price:number,amnt:number){
-        this.suppliers.push({agent,amnt});
+        this.suppliers.push({agent,price,amnt});
     }
 }

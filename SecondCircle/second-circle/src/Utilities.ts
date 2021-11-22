@@ -1,3 +1,6 @@
+var seedrandom = require('seedrandom');
+seedrandom(8675309, { global: true });
+
 export const pairwise = <T>(arr: T[])=>{
     const toReturn = [];
     for(var i=0; i < arr.length - 1; i++){

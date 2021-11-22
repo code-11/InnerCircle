@@ -11,6 +11,8 @@ export class NationBuilder{
 
     marriages : MarriageData = {};
 
+    
+
     constructor(){
         this.createCitizenry();
     }
