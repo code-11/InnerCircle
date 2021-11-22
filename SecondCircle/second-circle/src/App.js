@@ -21,7 +21,7 @@ export default class App extends Component{
     const nation = new NationBuilder();
     const simulation = new Simulation(nation);
     simulation.jobAssignment();
-    console.log(nation.citizens.slice().map((ag)=>ag.toString()));
+    console.log(nation.citizens);
   }
 
   render(){

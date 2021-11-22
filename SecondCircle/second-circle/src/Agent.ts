@@ -24,6 +24,8 @@ export interface AgentStats{
     Health: number;
 }
 
+export const ADULT_AGE=13; //Anyone older than 13 is an adult
+
 const agentStatsToString=(input:AgentStats)=>{
     return `[${input.Favor} ${input.Bulwark} ${input.Academia} ${input.Wordcraft} ${input.Precepts} ${input.Wealth} ${input.Health}]`;
 }
@@ -60,7 +62,7 @@ export const rndAgent=(id:number,name:string|null=null, title:string="Commoner")
 export const marriageScore=(a :Agent, b:Agent)=>{
     const desireScore = Math.min(a.desireToMarry,b.desireToMarry) * 3; //0-300
     const sexScore= a.sex !== b.sex ? 90 : 10; //10 or 90
-    const absoluteAge = (a.age > 13 && b.age > 13) ? 0 : -Infinity; // 0 or -Inf
+    const absoluteAge = (a.age > ADULT_AGE && b.age > ADULT_AGE) ? 0 : -Infinity; // 0 or -Inf
     const ageScore = (100-Math.abs(a.age-b.age))*2; //0-200
     const moneyScore =Math.abs(200 - (Math.floor(Math.log10(Math.abs(a.stats.Wealth-b.stats.Wealth)+.001))*50)); //200
     const wordScore = Math.max(a.stats.Wordcraft,b.stats.Wordcraft) * 10; //100
@@ -83,6 +85,10 @@ export default class Agent{
     desireToMarry : number = 0;
 
     job: Job = new Unemployed();
+
+    parents:Agent[]=[];
+    children: Agent[]=[];
+    spouses:Agent[]=[];
 
     stats = {
         Favor: 5,

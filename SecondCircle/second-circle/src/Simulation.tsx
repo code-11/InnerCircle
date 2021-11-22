@@ -32,11 +32,11 @@ export default class Simulation{
         }
     }
 
-    
-
-    step(){
-        for(const citizen of this.nation.citizens){ 
+    houseBuilding(){
+        //citizens is sorted by best
+        for (const [i,citizen] of this.nation.citizens.entries()){
             
         }
     }
+
 };
