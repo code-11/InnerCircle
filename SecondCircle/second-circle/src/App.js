@@ -15,13 +15,15 @@ export default class App extends Component{
   } 
 
   componentDidMount(){
+    const geography=new GeographyBuilder(100,100);
     this.setState({
-      mapData:(new GeographyBuilder(100,100)).createLocalmap()
+      mapData:(geography.createLocalmap())
     });
     const nation = new NationBuilder();
-    const simulation = new Simulation(nation);
+    const simulation = new Simulation(nation,geography);
     simulation.jobAssignment();
-    console.log(nation.citizens);
+    simulation.houseBuilding();
+    console.log(nation.familyHeads);
   }
 
   render(){

@@ -300,9 +300,28 @@ export class GeographyBuilder{
                 successfulStands+=1;
             }
         }
+    }
 
 
+    chooseFoundingSite(tileMap:{[key: string]:Tile}){
+        const possibleSites=[]
+        const x1=Math.floor(this.width/2);
+        const y1=Math.floor(this.height/2);
+        const x0=x1-10;
+        const y0=y1-10;
+        const x2=x1+10;
+        const y2=y1+10;
 
+        const xs=[x0,x1,x2];
+        const ys=[y0,y1,y2];
+        for (const x of xs){
+            for (const y of ys){
+                const tile=tileMap[ptKey([x,y])];
+                if (tile.tileType!=TileType.Water && tile.tileType!=TileType.Rock && tile.tileType!=TileType.RichSoil){
+                    return [x,y];
+                }
+            }
+        } 
     }
 
     createLocalmap(){

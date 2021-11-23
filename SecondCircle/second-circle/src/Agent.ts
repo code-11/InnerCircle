@@ -2,6 +2,7 @@ import {getRandomInt, fakePareto, triangleProb, choose } from "./Utilities";
 import maleHumanNames from "./data/maleHumanNames.json";
 import femaleHumanNames from "./data/femaleHumanNames.json";
 import Job, { Unemployed } from "./Job";
+import ImmobileHolding from "./ImmobileHolding";
 
 
 export type Sex= "M" | "F";
@@ -89,6 +90,8 @@ export default class Agent{
     parents:Agent[]=[];
     children: Agent[]=[];
     spouses:Agent[]=[];
+
+    house: ImmobileHolding | null=null;
 
     stats = {
         Favor: 5,

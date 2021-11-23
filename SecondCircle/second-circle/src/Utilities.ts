@@ -14,6 +14,10 @@ export const copy = (obj : any)=>{
     
 }
 
+export const sum = (arr:number[])=>{
+    return arr.reduce((a, b) => a + b, 0)
+}
+
 export const choose = (inputArr:any[])=>{
     return inputArr[getRandomInt(inputArr.length)];
 }

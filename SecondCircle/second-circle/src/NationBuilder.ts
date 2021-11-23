@@ -11,6 +11,7 @@ export class NationBuilder{
 
     marriages : MarriageData = {};
         
+    familyHeads : Agent[]=[];
 
     constructor(){
         this.createCitizenry();
@@ -27,7 +28,6 @@ export class NationBuilder{
     static gerontocracy = {
         leaderSort : (a:Agent,b:Agent)=>Math.sign(b.age-a.age)
     }
-
 
     createCitizenry(){
         //Create some people
@@ -58,6 +58,7 @@ export class NationBuilder{
                     }else{
                         marriages[citizen.id]={citizen, other: null, score:0};
                     }
+                    this.familyHeads.push(citizen);
                 }
             }
         }
