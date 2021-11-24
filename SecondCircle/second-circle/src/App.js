@@ -17,7 +17,7 @@ export default class App extends Component{
   componentDidMount(){
     const geography=new GeographyBuilder(100,100);
     this.setState({
-      mapData:(geography.createLocalmap())
+      mapData:(geography.getReactTileMap())
     });
     const nation = new NationBuilder();
     const simulation = new Simulation(nation,geography);
