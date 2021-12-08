@@ -3,7 +3,7 @@ import { getRandomInt,pairwise,choose } from './Utilities';
 import isEqual from 'lodash.isequal';
 
 export enum TileType {
-    Dirt , RichSoil , DryDirt , Scrub , Tree , Rock , Water, Bridge ,Wall ,Building
+    Dirt , RichSoil , Road, DryDirt , Scrub , Tree , Rock , Water, Bridge ,Wall ,Building
 }
 export const tileToColor  = (tileType: TileType)=>{
 
@@ -11,6 +11,7 @@ export const tileToColor  = (tileType: TileType)=>{
     {
         [TileType.Dirt]: "#8a745a", //Brown
         [TileType.RichSoil]: "#5C4033", // Dark Brown
+        [TileType.Road]:"#7d6b4b",//GreyBrown
         [TileType.DryDirt]: "brown",
         [TileType.Scrub]: "lightgreen",
         [TileType.Tree]: "green",
@@ -29,7 +30,7 @@ export type Tile={
 }
 
 const tileBuildable = (tile:Tile)=>{
-    return tile.tileType==TileType.Dirt || tile.tileType==TileType.Tree;
+    return tile!=undefined && (tile.tileType==TileType.Dirt || tile.tileType==TileType.Tree);
 }
 
 export const neighbors=(x:number,y:number)=>{
@@ -47,16 +48,19 @@ const circlePattern=(n:number)=>{
         return circleCache[n]; 
     }else{ 
         const newStrCircle:Set<string>=new Set();
-        if (n==1){
+        if (n==0){
+            newStrCircle.add(ptKey([0,0])); 
+        }else if (n==1){
             for (const pt of neighborsWithCorners(0,0)){
                 newStrCircle.add(ptKey(pt));
             }
         }else{
+            const prevPrevCirclePoints = circlePattern(n-2);
             const prevCirclePoints=circlePattern(n-1);
             for (const strPt of prevCirclePoints){
                 const pt=keyPt(strPt);
                 for (const neighbor of neighbors(pt[0],pt[1])){
-                    const notInPrev=!prevCirclePoints.has(ptKey(neighbor));
+                    const notInPrev=!prevCirclePoints.has(ptKey(neighbor)) && !prevPrevCirclePoints.has(ptKey(neighbor));
                     const notInSeen=!newStrCircle.has(ptKey(neighbor));
                     const notOrigin=!isEqual(neighbor,[0,0]);
                     if (notOrigin && notInPrev && notInSeen){
@@ -80,6 +84,10 @@ export const circle=(center:number[],n:number)=>{
         }
 
         return toReturn;
+}
+
+export const circleDiameter=(circleNum:number)=>{
+    return ( circleNum * 2) +1;
 }
 
 export const floodFill=(x:number, y:number, type:TileType, tileMap:{[key: string]:Tile})=>{
@@ -377,7 +385,7 @@ export class GeographyBuilder{
         for (const x of xs){
             for (const y of ys){
                 // const tile=this.tileMap[ptKey([x,y])];
-                if (this.canPlaceBuilding(x,y,10,10)){
+                if (this.canPlaceBuilding([x,y],10,10)){
                     return [x,y]
                 }
             }
@@ -403,9 +411,11 @@ export class GeographyBuilder{
         });
     }
 
-    canPlaceBuilding(x:number,y:number,height:number,width:number){
+    canPlaceBuilding(pt:number[],height:number,width:number){
+        const x=pt[0];
+        const y=pt[1];
         for (let i=x;i<x+width;i+=1){
-            for(let j=y;j<height;j+=1){
+            for(let j=y;j<y+height;j+=1){
                 if (!tileBuildable(this.tileMap[ptKey([i,j])])){
                     return false;
                 }
@@ -414,28 +424,45 @@ export class GeographyBuilder{
         return true;
     }
 
-    placeBuilding(x:number,y:number,height:number,width:number){
-        const circlePts=circle([x,y],6);
-        for (const pt of circlePts){
-            console.log(pt);
-            this.tileMap[ptKey(pt)].tileType=TileType.Building;
-        }
-
-        // for (let i=x;i<x+width;i+=1){
-        //     for(let j=y;j<y+height;j+=1){
-        //        this.tileMap[ptKey([i,j])].tileType=TileType.Building;
-        //     }
+    placeBuilding(pt:number[],height:number,width:number){
+        const x=pt[0];
+        const y=pt[1];
+        // const circlePts=circle(pt,5);
+        // for (const pt of circlePts){
+        //     console.log(pt);
+        //     this.tileMap[ptKey(pt)].tileType=TileType.Building;
         // }
+
+        for (let i=x;i<x+width;i+=1){
+            for(let j=y;j<y+height;j+=1){
+               this.tileMap[ptKey([i,j])].tileType=TileType.Building;
+            }
+        }
     }
 
-    vaguellyPlaceBuidling(height:number,width:number,pt:number[]|null=null){
-        if (pt!=null){
-            if (this.canPlaceBuilding(pt[0],pt[1],height,width)){
-                this.placeBuilding(pt[0],pt[1],height,width)
+    vaguelyPlaceBuildingWithBuffer(height:number,width:number,pt:number[]){
+        const maxDimension = Math.ceil(Math.max(width+2,height+2));
+        let circleNum=0;
+        let diameter= circleDiameter(circleNum); 
+        while (diameter*2 < this.width){
+            const circlePts=circle(pt,circleNum);
+            for (let i=0;i<circlePts.length;i+=maxDimension){
+                const circlePt=circlePts[i];
+                if (this.canPlaceBuilding(circlePt,height+1,width+1)){
+                    this.placeBuilding([circlePt[0]+1,circlePt[1]+1],height,width);
+                    const roadPts=line(circlePt[0]+1,circlePt[1]+1,pt[0],pt[1]);
+                    for(const roadPt of roadPts){
+                        if (tileBuildable(this.tileMap[ptKey(roadPt)])){
+                            this.tileMap[ptKey(roadPt)].tileType=TileType.Road;
+                        }
+                    }
+                    return true;
+                }
             }
-        }else{
-
+            circleNum+=maxDimension;
+            diameter=circleDiameter(circleNum); 
         }
+        return false;
     }
 
     createLocalmap(){

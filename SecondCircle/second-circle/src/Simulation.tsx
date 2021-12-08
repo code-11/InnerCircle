@@ -51,6 +51,11 @@ export default class Simulation{
         //locate founding site
         const foundingSite=this.geography.chooseFoundingSite();
 
+        if (foundingSite==null){
+            console.log("Could not locate a good founding site");
+            return;
+        }
+
         for (const familyHead of this.nation.familyHeads.slice()){
             const contributions:{[key:number]:number}={};
             
@@ -79,8 +84,7 @@ export default class Simulation{
             const niceSize=width*height;
             const leftOver=size-niceSize;
             console.log("width:"+width+" height:"+height+" niceSize:"+niceSize+" leftOver:"+leftOver+" size:"+size);
-            this.geography.vaguellyPlaceBuidling(height,width,foundingSite);
-            break;
+            this.geography.vaguelyPlaceBuildingWithBuffer(height,width,foundingSite);
             // if (familyHead.title=="Leader"){
 
             // }
