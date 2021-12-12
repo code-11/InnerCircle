@@ -4,6 +4,7 @@ import { choose, sum } from "./Utilities";
 import { ADULT_AGE } from "./Agent";
 import ImmobileHolding from "./ImmobileHolding";
 import { GeographyBuilder } from "./GeographyBuilder";
+import Powerflow from "./Powerflow";
 
 export default class Simulation{
 
@@ -35,6 +36,22 @@ export default class Simulation{
                 citizen.job=bestChoice;
             } 
         }
+    }
+
+    createPowerflow(){
+        const powerflow=new Powerflow();
+        const best=this.nation.citizens[0];
+        powerflow.addChild(null,best);
+        for (let i=1;i<5;i+=1){
+            const citizen=this.nation.citizens[i]
+            powerflow.addChild(best,citizen);
+        }
+        for (let i=5;i<8;i+=1){
+            const citizen=this.nation.citizens[i]
+            const subBest=this.nation.citizens[4];
+            powerflow.addChild(subBest,citizen);
+        }
+        return powerflow;
     }
 
     houseBuilding(){

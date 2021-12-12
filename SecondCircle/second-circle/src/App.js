@@ -22,17 +22,18 @@ export default class App extends Component{
     simulation.jobAssignment();
     simulation.houseBuilding();
     this.setState({
-      mapData:(geography.getReactTileMap())
+      mapData:(geography.getReactTileMap()),
+      powerflow:simulation.createPowerflow(),
     });
     console.log(nation.familyHeads);
   }
 
   render(){
-    const {mapData}=this.state;
+    const {mapData, powerflow}=this.state;
     return (
       <div className="App">
         {/* <LocalMap class="local-map-wrapper" mapData={mapData}/> */}
-        <PowerflowVis />
+        <PowerflowVis powerflow={powerflow} />
       </div>
     );
   }
