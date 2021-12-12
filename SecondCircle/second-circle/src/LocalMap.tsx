@@ -21,7 +21,7 @@ export default class LocalMap extends React.Component{
                 }
                 return <div key={i} className="local-map-tile" style={styleObj}/>
             })
-            return  <div className="local-map-container">
+            return  <div className="local-map">
                 {tileElements}
             </div>
         }

@@ -4,6 +4,7 @@ import {GeographyBuilder} from "./GeographyBuilder";
 import LocalMap from './LocalMap';
 import { Component } from 'react';
 import Simulation from './Simulation';
+import PowerflowVis from "./PowerflowVis";
 
 export default class App extends Component{
 
@@ -30,7 +31,8 @@ export default class App extends Component{
     const {mapData}=this.state;
     return (
       <div className="App">
-        <LocalMap mapData={mapData}/>
+        {/* <LocalMap class="local-map-wrapper" mapData={mapData}/> */}
+        <PowerflowVis />
       </div>
     );
   }

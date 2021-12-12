@@ -1,0 +1,48 @@
+Aspects of gameplay:
+
+Mercantile
+Informational
+Diplomacy
+Religious?
+
+
+Possible tasks to do during a day:
+Scribe a document (challenging)
+Write a dictated document (easy)
+Dictate a document (easy)
+
+
+Possible minigames:
+Pipe flow
+Graph flow
+Roulette (hit slider at moment)
+Blackjack
+Risk-reward
+
+Powerflow:
+All people in the realm are part of a tree of power, with the king being at the top and all organizations and people being below him.
+The king's advisors, queen are next, followed by the powerful guilds, nobility etc.
+At the bottom are freemen, serfs and vagrants. The tree represents power, not offical heirarchy.
+
+King's inner circle:
+	Spy master
+		Spy cells
+	Captain of the guard
+		Guards
+	Royal Treasurer
+		Tax collectors 
+		Merchant Guilds
+	Appointed Heir
+	Patriarch
+		Preists
+	Minister of Justice
+		Judges
+	Steward
+		Scribes
+		Diplomats
+		Minor royal titles
+	Nobility
+		Minor Nobility
+			Minor title and elected positions
+				Freemen and Vagrants
+					Serfs, Slaves
