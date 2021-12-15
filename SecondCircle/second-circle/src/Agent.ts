@@ -13,6 +13,7 @@ export enum Stat{
     Wealth,
     Wordcraft,
     Precepts,
+    Scan,
     Health,
 }
 export interface AgentStats{
@@ -22,6 +23,7 @@ export interface AgentStats{
     Wealth : number;
     Wordcraft : number;
     Precepts : number;
+    Scan:number;
     Health: number;
 }
 
@@ -45,6 +47,7 @@ export const rndAgent=(id:number,name:string|null=null, title:string="Commoner")
     const academia=fakePareto(1,10);
     const wordcraft=triangleProb(1,10);
     const precepts=triangleProb(1,10);
+    const scan = triangleProb(1,10);
     const age = getRandomInt(50)+fakePareto(0,50,3);
     const wealth = (age>13) ? fakePareto(1,7000,5) : triangleProb(1,10);
 
@@ -56,7 +59,7 @@ export const rndAgent=(id:number,name:string|null=null, title:string="Commoner")
     const nameToUse= name ? name : rndName(sex);
  
     return new Agent(id,nameToUse,title,age,sex, desireToMarry,{
-        Favor:favor, Bulwark:bulwark, Academia:academia, Wealth:wealth, Wordcraft:wordcraft, Precepts:precepts, Health: 100
+        Favor:favor, Bulwark:bulwark, Academia:academia, Wealth:wealth, Wordcraft:wordcraft, Precepts:precepts, Scan:scan, Health: 100
     });
 }
 
@@ -100,6 +103,7 @@ export default class Agent{
         Wealth: 5,
         Wordcraft: 5,
         Precepts: 5,
+        Scan:5,
         Health: 100,
     };
 
@@ -114,7 +118,7 @@ export default class Agent{
     }
 
     capability(){
-        return this.stats.Academia + this.stats.Bulwark + this.stats.Favor + this.stats.Precepts + this.stats.Wordcraft;
+        return this.stats.Academia + this.stats.Bulwark + this.stats.Favor + this.stats.Precepts + this.stats.Wordcraft + this.stats.Scan;
     }
 
     toString(){

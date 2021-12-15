@@ -29,4 +29,8 @@ export default class Powerflow{
         }
     }
 
+    getChildren(agent:Agent){
+        return this.agentToNode[agent.id];
+    }
+
 }

@@ -1,7 +1,19 @@
-import Agent, { rndAgent, marriageScore, ADULT_AGE} from "./Agent";
+import Agent, { rndAgent, marriageScore, ADULT_AGE, Stat} from "./Agent";
 import { Jobs } from "./Job";
 
 type MarriageData={[key:number]:{citizen:Agent,other:Agent | null,score:number}};
+
+export const EXPERT_NAMES:{[key in Stat]?:string} ={
+    [Stat.Favor]:"Patriarch",
+    [Stat.Bulwark]:"Royal Guard",
+    [Stat.Academia]:"Royal Scholar",
+    [Stat.Wordcraft]:"Counselor",
+    [Stat.Precepts]:"High Judge",
+}
+
+export const BestAgentComparator = (a:Agent, b:Agent,attributeGetter:(agent:Agent)=>number) =>{
+    return Math.sign(attributeGetter(b)-attributeGetter(a));
+}
 
 export class NationBuilder{
 
