@@ -1,5 +1,6 @@
 import Agent from "./Agent";
-import {EXPERT_NAMES,BestAgentComparator} from "./NationBuilder";
+import Powerflow from "./Powerflow";
+import {EXPERT_NAMES,BestAgent} from "./NationBuilder";
 
 type LeaderTask={
     description:string;
@@ -9,27 +10,32 @@ type LeaderTask={
 
 export default class LeaderAI{
 
-    identifyThingsToDo(Powerflow powerflow){
+    identifyThingsToDo(powerflow:Powerflow){
 
         const toDoList : LeaderTask[] = [];
 
         // Make sure you have enough underlings
-        for (const [stat,name] of Object.entries(EXPERT_NAMES)){
+        for (const [stat] of EXPERT_NAMES){
+            const name = EXPERT_NAMES.get(stat);
+            //TODO: Check to see that position isn't already in powerflow
             const hireTask = {
                 description:"Find a "+name,
                 priority:1,
                 perform:(agents:Agent[])=>{
-                    return agents.reduce((a,b)=>BestAgentComparator(a,b,(agent)=>agent.stats[stat]))
+                    if (agents.length==0){
+                        return null;
+                    }
+                    let best : Agent | null=agents[0];
+                    for (const agent of agents){
+                        const statGetter:(agent:Agent)=>number=(agent)=>agent.stats[stat];
+                        best=BestAgent(best,agent,statGetter);
+                    }
+                    return best;
                 }
             }
         }
 
-        if (powerflow.getChildren().length<5){
-            const findUnderling=new LeaderTask("Find More Underlings")
-        }
-
         //Make sure your underlings aren't getting too powerful
-        if powerflow
     }
 
 

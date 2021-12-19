@@ -17,20 +17,20 @@ export enum Stat{
     Health,
 }
 export interface AgentStats{
-    Favor : number;
-    Bulwark : number;
-    Academia : number;
-    Wealth : number;
-    Wordcraft : number;
-    Precepts : number;
-    Scan:number;
-    Health: number;
+    [Stat.Favor] : number;
+    [Stat.Bulwark] : number;
+    [Stat.Academia] : number;
+    [Stat.Wealth] : number;
+    [Stat.Wordcraft] : number;
+    [Stat.Precepts] : number;
+    [Stat.Scan]:number;
+    [Stat.Health]: number;
 }
 
 export const ADULT_AGE=13; //Anyone older than 13 is an adult
 
 const agentStatsToString=(input:AgentStats)=>{
-    return `[${input.Favor} ${input.Bulwark} ${input.Academia} ${input.Wordcraft} ${input.Precepts} ${input.Wealth} ${input.Health}]`;
+    return `[${input[Stat.Favor]} ${input[Stat.Bulwark]} ${input[Stat.Academia]} ${input[Stat.Wordcraft]} ${input[Stat.Precepts]} ${input[Stat.Wealth]} ${input[Stat.Health]}]`;
 }
 
 const rndName=(sex: Sex)=>{
@@ -59,7 +59,7 @@ export const rndAgent=(id:number,name:string|null=null, title:string="Commoner")
     const nameToUse= name ? name : rndName(sex);
  
     return new Agent(id,nameToUse,title,age,sex, desireToMarry,{
-        Favor:favor, Bulwark:bulwark, Academia:academia, Wealth:wealth, Wordcraft:wordcraft, Precepts:precepts, Scan:scan, Health: 100
+        [Stat.Favor]:favor, [Stat.Bulwark]:bulwark, [Stat.Academia]:academia, [Stat.Wealth]:wealth, [Stat.Wordcraft]:wordcraft, [Stat.Precepts]:precepts, [Stat.Scan]:scan, [Stat.Health]: 100
     });
 }
 
@@ -68,9 +68,9 @@ export const marriageScore=(a :Agent, b:Agent)=>{
     const sexScore= a.sex !== b.sex ? 90 : 10; //10 or 90
     const absoluteAge = (a.age > ADULT_AGE && b.age > ADULT_AGE) ? 0 : -Infinity; // 0 or -Inf
     const ageScore = (100-Math.abs(a.age-b.age))*2; //0-200
-    const moneyScore =Math.abs(200 - (Math.floor(Math.log10(Math.abs(a.stats.Wealth-b.stats.Wealth)+.001))*50)); //200
-    const wordScore = Math.max(a.stats.Wordcraft,b.stats.Wordcraft) * 10; //100
-    const preceptsScore = Math.sign(a.stats.Precepts===0 ? 1 : a.stats.Precepts) === Math.sign(b.stats.Precepts===0 ? 1 : b.stats.Precepts) ? 100 : 0; // 0 or 100
+    const moneyScore =Math.abs(200 - (Math.floor(Math.log10(Math.abs(a.stats[Stat.Wealth]-b.stats[Stat.Wealth])+.001))*50)); //200
+    const wordScore = Math.max(a.stats[Stat.Wordcraft],b.stats[Stat.Wordcraft]) * 10; //100
+    const preceptsScore = Math.sign(a.stats[Stat.Precepts]===0 ? 1 : a.stats[Stat.Precepts]) === Math.sign(b.stats[Stat.Precepts]===0 ? 1 : b.stats[Stat.Precepts]) ? 100 : 0; // 0 or 100
     return desireScore + sexScore + absoluteAge + ageScore + moneyScore + wordScore + preceptsScore;
 
 }
@@ -97,14 +97,14 @@ export default class Agent{
     house: ImmobileHolding | null=null;
 
     stats = {
-        Favor: 5,
-        Bulwark: 10,
-        Academia: 5,
-        Wealth: 5,
-        Wordcraft: 5,
-        Precepts: 5,
-        Scan:5,
-        Health: 100,
+        [Stat.Favor]: 5,
+        [Stat.Bulwark]: 10,
+        [Stat.Academia]: 5,
+        [Stat.Wealth]: 5,
+        [Stat.Wordcraft]: 5,
+        [Stat.Precepts]: 5,
+        [Stat.Scan]:5,
+        [Stat.Health]: 100,
     };
 
     constructor(id: number, name : string, title:string, age:number, sex: Sex, desireToMarry:number, stats:AgentStats){
@@ -118,7 +118,7 @@ export default class Agent{
     }
 
     capability(){
-        return this.stats.Academia + this.stats.Bulwark + this.stats.Favor + this.stats.Precepts + this.stats.Wordcraft + this.stats.Scan;
+        return this.stats[Stat.Academia] + this.stats[Stat.Bulwark] + this.stats[Stat.Favor] + this.stats[Stat.Precepts] + this.stats[Stat.Wordcraft] + this.stats[Stat.Scan];
     }
 
     toString(){

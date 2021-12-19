@@ -3,16 +3,27 @@ import { Jobs } from "./Job";
 
 type MarriageData={[key:number]:{citizen:Agent,other:Agent | null,score:number}};
 
-export const EXPERT_NAMES:{[key in Stat]?:string} ={
-    [Stat.Favor]:"Patriarch",
-    [Stat.Bulwark]:"Royal Guard",
-    [Stat.Academia]:"Royal Scholar",
-    [Stat.Wordcraft]:"Counselor",
-    [Stat.Precepts]:"High Judge",
-}
+export const EXPERT_NAMES=new Map<Stat, string>([
+    [Stat.Favor,"Patriarch"],
+    [Stat.Bulwark,"Royal Guard"],
+    [Stat.Academia,"Royal Scholar"],
+    [Stat.Wordcraft,"Counselor"],
+    [Stat.Precepts,"High Judge"],
+]);
 
-export const BestAgentComparator = (a:Agent, b:Agent,attributeGetter:(agent:Agent)=>number) =>{
-    return Math.sign(attributeGetter(b)-attributeGetter(a));
+export const BestAgent = (a:Agent|null, b:Agent,attributeGetter:(agent:Agent)=>number) =>{
+    if (a ==null){
+        return b;
+    }
+    const aVal = attributeGetter(a);
+    const bVal = attributeGetter(b);
+    if (aVal>bVal){
+        return a;
+    }
+    if (bVal>aVal){
+        return b;
+    }
+    return null;
 }
 
 export class NationBuilder{
