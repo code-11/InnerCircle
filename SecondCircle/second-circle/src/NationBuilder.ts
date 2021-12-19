@@ -1,5 +1,6 @@
 import Agent, { rndAgent, marriageScore, ADULT_AGE, Stat} from "./Agent";
-import { Jobs } from "./Job";
+import Job, { Jobs } from "./Job";
+import LeaderJob from "./LeaderJob";
 
 type MarriageData={[key:number]:{citizen:Agent,other:Agent | null,score:number}};
 
@@ -41,7 +42,7 @@ export class NationBuilder{
     }
 
     static plutocracy : any = {
-        leaderSort : (a:Agent,b:Agent)=>Math.sign(b.stats.Wealth-a.stats.Wealth),
+        leaderSort : (a:Agent,b:Agent)=>Math.sign(b.stats[Stat.Wealth]-a.stats[Stat.Wealth]),
     }
 
     static meritocracy = {
@@ -60,7 +61,7 @@ export class NationBuilder{
         this.citizens.sort(NationBuilder.plutocracy.leaderSort);
         const tempCitizens=this.citizens.slice();
 
-        tempCitizens[0].job = Jobs.Administrator;
+        tempCitizens[0].job = new LeaderJob("Plutarch");
         tempCitizens[0].title="Leader";
 
         // console.log(tempCitizens.slice().map((ag)=>ag.toString()));

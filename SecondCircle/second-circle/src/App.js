@@ -5,6 +5,7 @@ import LocalMap from './LocalMap';
 import { Component } from 'react';
 import Simulation from './Simulation';
 import PowerflowVis from "./PowerflowVis";
+import TimeControls from "./TimeControls";
 
 export default class App extends Component{
 
@@ -18,14 +19,17 @@ export default class App extends Component{
   componentDidMount(){
     const geography=new GeographyBuilder(100,100);
     const nation = new NationBuilder();
-    const simulation = new Simulation(nation,geography);
-    simulation.jobAssignment();
-    simulation.houseBuilding();
+    this.simulation = new Simulation(nation,geography);
+    this.simulation.jobAssignment();
+    this.simulation.houseBuilding();
+    const powerflow =this.simulation.createPowerflow()
     this.setState({
       mapData:(geography.getReactTileMap()),
-      powerflow:simulation.createPowerflow(),
     });
-    console.log(nation.familyHeads);
+    this.simulation.play(nation.citizens,powerflow);
+    this.setState({
+      powerflow:powerflow,
+    })
   }
 
   render(){
@@ -33,6 +37,16 @@ export default class App extends Component{
     return (
       <div className="App">
         {/* <LocalMap class="local-map-wrapper" mapData={mapData}/> */}
+        <TimeControls 
+          speed={
+            this.simulation!=undefined?
+              this.simulation.speed:
+              0}
+          onSetSpeed={
+            this.simulation!=undefined?
+              (speed)=>this.simulation.onSetSpeed(speed):
+              (i)=>{}}
+        />
         <PowerflowVis powerflow={powerflow} />
       </div>
     );

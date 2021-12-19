@@ -27,8 +27,10 @@ export default class PowerflowVis extends React.Component<PowerflowVisProps> {
       const layout = { name: 'dagre' };
 
       for (let node of Object.values(powerflow.agentToNode)){
+        const name = node!.data.name;
+        const jobName = node!.data.job.name;
         elements.push({
-          data:{id:""+node!.data.id, label:node!.data.name}
+          data:{id:""+node!.data.id, label:name+" - "+jobName}
         });
       }
 

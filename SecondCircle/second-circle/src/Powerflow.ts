@@ -29,8 +29,26 @@ export default class Powerflow{
         }
     }
 
+    getHead(){
+        return this.head;
+    }
+
+    getAgents(){
+        return Object.values(this.agentToNode).map(node=>node.data);
+    }
+
     getChildren(agent:Agent){
-        return this.agentToNode[agent.id];
+        return this.agentToNode[agent.id].children;
+    }
+
+    childrenHaveJob(agent:Agent,jobName:string){
+        const children:Agent[]=this.getChildren(agent).map(c=>c.data);
+        for (const child of children){
+            if (child.job.name==jobName){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

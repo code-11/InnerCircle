@@ -1,19 +1,37 @@
 import { Jobs, Unemployed } from "./Job";
 import { NationBuilder } from "./NationBuilder";
 import { choose, sum } from "./Utilities";
-import { ADULT_AGE } from "./Agent";
+import Agent, { ADULT_AGE, Stat } from "./Agent";
 import ImmobileHolding from "./ImmobileHolding";
 import { GeographyBuilder } from "./GeographyBuilder";
 import Powerflow from "./Powerflow";
+import React from "react";
 
-export default class Simulation{
+type SimulationState = {
+    speed: number;
+    time:number;
+}
+
+export default class Simulation extends React.PureComponent<{},SimulationState>{
 
     nation:NationBuilder;
     geography:GeographyBuilder;
 
     constructor(nation:NationBuilder, geography:GeographyBuilder){
+        super({});
         this.nation=nation;
         this.geography=geography;
+
+    }
+
+    play(agents:Agent[],powerflow: Powerflow){
+        const leader=powerflow.getHead();
+        if (leader !==null){
+            const tasks=leader.data.job.identifyThingsToDo(leader.data,agents,powerflow);
+            for (const task of tasks){
+                task.perform();
+            }
+        }
     }
 
     jobAssignment(){
@@ -42,15 +60,15 @@ export default class Simulation{
         const powerflow=new Powerflow();
         const best=this.nation.citizens[0];
         powerflow.addChild(null,best);
-        for (let i=1;i<5;i+=1){
-            const citizen=this.nation.citizens[i]
-            powerflow.addChild(best,citizen);
-        }
-        for (let i=5;i<8;i+=1){
-            const citizen=this.nation.citizens[i]
-            const subBest=this.nation.citizens[4];
-            powerflow.addChild(subBest,citizen);
-        }
+        // for (let i=1;i<5;i+=1){
+        //     const citizen=this.nation.citizens[i]
+        //     powerflow.addChild(best,citizen);
+        // }
+        // for (let i=5;i<8;i+=1){
+        //     const citizen=this.nation.citizens[i]
+        //     const subBest=this.nation.citizens[4];
+        //     powerflow.addChild(subBest,citizen);
+        // }
         return powerflow;
     }
 
@@ -81,10 +99,10 @@ export default class Simulation{
 
             let budget = 0;
             for (const familyMember of payingfamilyMembers){
-                const contribution = familyMember.stats.Wealth * realEstateRate;
+                const contribution = familyMember.stats[Stat.Wealth] * realEstateRate;
                 budget+=contribution;
                 if (familyHead.title!="Leader"){
-                    familyMember.stats.Wealth-=contribution;
+                    familyMember.stats[Stat.Wealth]-=contribution;
                 }
             }
 
@@ -100,7 +118,7 @@ export default class Simulation{
             const height=Math.floor(size/width);
             const niceSize=width*height;
             const leftOver=size-niceSize;
-            console.log("width:"+width+" height:"+height+" niceSize:"+niceSize+" leftOver:"+leftOver+" size:"+size);
+            //console.log("width:"+width+" height:"+height+" niceSize:"+niceSize+" leftOver:"+leftOver+" size:"+size);
             this.geography.vaguelyPlaceBuildingWithBuffer(height,width,foundingSite);
             // if (familyHead.title=="Leader"){
 
