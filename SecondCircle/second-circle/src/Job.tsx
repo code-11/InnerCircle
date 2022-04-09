@@ -3,9 +3,15 @@ import Identifiable from "./Identifiable";
 import {Commodity} from "./Commodities";
 import Powerflow from "./Powerflow";
 
+/**
+ * Time exists on a 100 units -> 12 hr system.
+ * So sleeping would be approximately 60 units
+ * Eating would be about 10
+ * The whole day would be 200 units
+ */
+
 export interface JobTask{
     description:string;
-    priority:number;
     perform:()=>void;
 }
 
@@ -40,7 +46,6 @@ export class Placeholder extends Job{
     identifyThingsToDo(agent: Agent,agents:Agent[], powerflow: Powerflow): JobTask[] {
         return [{
             description:"placeholder",
-            priority:1,
             perform:()=>{},
         }]
     }
@@ -49,10 +54,9 @@ export class Placeholder extends Job{
 export abstract class BaseJob extends Job{
     abstract estimateGoodness(person:Agent) : number;
 
-    identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow){
+    identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow): JobTask[]{
         return [{
             description:"toil",
-            priority:1,
             perform:()=>{}
         }];
     }
@@ -75,8 +79,13 @@ export class Lumberjack extends BaseJob{
         //from -13.5 to 100
         return person.stats[Stat.Bulwark] * 6.66;
     }
-    produces(){
-        return {[Commodity.Lumber]:4};
+    identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow): JobTask[]{
+        return [{
+            description:"Chop trees",
+            perform:()=>{
+                agent.giveItem(Commodity.Lumber.some(10));
+            }
+        }];
     }
 }
 
@@ -94,16 +103,43 @@ export class Carpenter extends BaseJob{
     }
 }
 
-export class Hunter extends BaseJob{
+export class Hunter extends Job{
     constructor(){
         super("Hunter");
     }
     estimateGoodness(person:Agent){
         //from -13.5 to 100
-        return person.stats[Stat.Bulwark] * 6.66;
+        const bulWeight=.25;
+        const scanWeight=.8;
+        const preceptWeight=-.1;
+        const bulVal = person.stats[Stat.Bulwark] * bulWeight * 6.66;
+        const scanVal = person.stats[Stat.Scan] * scanWeight * 10;
+        const preceptVal = person.stats[Stat.Precepts] * preceptWeight * 10;
+        return bulVal + scanVal + preceptVal;
     }
-    produces(){
-        return {[Commodity.Food]: 6};
+
+    identifyThingsToDo(agent: Agent,agents:Agent[], powerflow: Powerflow): JobTask[] {
+        return [{
+            description:"Hunt",
+            perform:()=>{
+                agent.giveItem(Commodity.Food.some(7));
+            },
+        }]
+    }
+}
+
+export class Merchant extends BaseJob{
+    constructor(){
+        super("Merchant")
+    }
+    estimateGoodness(person: Agent): number {
+        const wordWeight=.5;
+        const scanWeight=.1;
+        const wealthWeight=.4;
+        const wordVal =  person.stats[Stat.Wordcraft] * wordWeight * 10;
+        const scanVal =  person.stats[Stat.Scan] * scanWeight * 10;
+        const wealthVal = person.stats[Stat.Wealth] * wealthWeight;
+        return wordVal + scanVal + wealthVal;
     }
 }
 
@@ -114,8 +150,13 @@ export class Farmer extends BaseJob{
     estimateGoodness(person:Agent){
         return person.stats[Stat.Bulwark] * 3.33;
     }
-    produces(){
-        return {[Commodity.Food]: 4};
+    identifyThingsToDo(agent: Agent,agents:Agent[], powerflow: Powerflow): JobTask[] {
+        return [{
+            description:"Farm",
+            perform:()=>{
+                agent.giveItem(Commodity.Food.some(10));
+            },
+        }]
     }
 
 }

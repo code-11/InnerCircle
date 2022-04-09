@@ -3,6 +3,7 @@ import maleHumanNames from "./data/maleHumanNames.json";
 import femaleHumanNames from "./data/femaleHumanNames.json";
 import Job, { Unemployed } from "./Job";
 import ImmobileHolding from "./ImmobileHolding";
+import { MobileHolding } from "./MobileHolding";
 
 
 export type Sex= "M" | "F";
@@ -96,6 +97,8 @@ export default class Agent{
 
     house: ImmobileHolding | null=null;
 
+    carried: MobileHolding[]=[];
+
     stats = {
         [Stat.Favor]: 5,
         [Stat.Bulwark]: 10,
@@ -115,6 +118,10 @@ export default class Agent{
         this.sex=sex;
         this.desireToMarry=desireToMarry;
         this.stats=stats;
+    }
+
+    giveItem(item:MobileHolding){
+        this.carried.push(item);
     }
 
     capability(){
