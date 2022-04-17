@@ -12,7 +12,7 @@ interface LeaderTask extends JobTask{
 export default class LeaderJob extends Job{
 
     constructor(name:string){
-        super(name);
+        super("leader",name);
     }
 
     identifyThingsToDo(leader:Agent,agents:Agent[],powerflow:Powerflow){
@@ -41,7 +41,7 @@ export default class LeaderJob extends Job{
                         }
                         if (best!=undefined){
                             powerflow.addChild(leader,best)
-                            best.job=new Placeholder(name);
+                            best.job=new Placeholder("placeholder",name);
                         }
                     }
                 }

@@ -27,6 +27,13 @@ export const BestAgent = (a:Agent|null, b:Agent,attributeGetter:(agent:Agent)=>n
     return null;
 }
 
+export type Provider={
+    itemId:string,
+    itemAmnt:number,
+    jobId:string,
+    agentId:number,
+}
+
 export class NationBuilder{
 
     citizens : Array<Agent> = [];
@@ -51,6 +58,32 @@ export class NationBuilder{
 
     static gerontocracy = {
         leaderSort : (a:Agent,b:Agent)=>Math.sign(b.age-a.age)
+    }
+
+
+    findCitizen(agentId:number){
+        return this.citizens.find((citizen)=>citizen.id==agentId);
+    }
+
+    //Returns a list of vendors that will together supply an amount of specific items
+    findServicesWithItemAmnt(itemId:string, itemAmnt:number, jobId:string){
+        let tempItemAmnt=itemAmnt;
+        const serviceList:Provider[]=[];
+        for(const citizen of this.citizens){
+            const isRightJobOrWild= citizen.job.id === jobId;
+            const itemAmnt = citizen.carried.getItemAmount(itemId,0);
+            if (isRightJobOrWild && itemAmnt>0 && tempItemAmnt>0){
+                const amntToBuy=Math.min(tempItemAmnt,itemAmnt);
+                serviceList.push({
+                    itemId,
+                    jobId,
+                    itemAmnt:amntToBuy,
+                    agentId:citizen.id,
+                });
+                tempItemAmnt-=amntToBuy;
+            } 
+        }
+        return serviceList;
     }
 
     createCitizenry(){

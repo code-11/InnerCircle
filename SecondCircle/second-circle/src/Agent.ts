@@ -1,9 +1,10 @@
 import {getRandomInt, fakePareto, triangleProb, choose } from "./Utilities";
 import maleHumanNames from "./data/maleHumanNames.json";
 import femaleHumanNames from "./data/femaleHumanNames.json";
-import Job, { Unemployed } from "./Job";
+import Job, { Unemployed, JobTask } from "./Job";
 import ImmobileHolding from "./ImmobileHolding";
-import { MobileHolding } from "./MobileHolding";
+import { Item } from "./Item";
+import { Inventory } from "./Inventory";
 
 
 export type Sex= "M" | "F";
@@ -97,7 +98,9 @@ export default class Agent{
 
     house: ImmobileHolding | null=null;
 
-    carried: MobileHolding[]=[];
+    carried: Inventory = new Inventory();
+
+    todo:JobTask[]=[];
 
     stats = {
         [Stat.Favor]: 5,
@@ -120,8 +123,11 @@ export default class Agent{
         this.stats=stats;
     }
 
-    giveItem(item:MobileHolding){
-        this.carried.push(item);
+    giveItem(item:Item){
+        this.carried.giveItem(item);
+    }
+    takeItemAmount(itemId:string, amnt:number):Item{
+        return this.carried.takeItemAmount(itemId ,amnt);
     }
 
     capability(){

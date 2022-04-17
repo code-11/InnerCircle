@@ -26,6 +26,7 @@ export default class App extends Component{
     this.setState({
       mapData:(geography.getReactTileMap()),
     });
+    this.simulation.assignStartingResources();
     this.simulation.play(nation.citizens,powerflow);
     this.setState({
       powerflow:powerflow,

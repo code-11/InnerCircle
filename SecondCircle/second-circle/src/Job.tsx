@@ -16,10 +16,12 @@ export interface JobTask{
 }
 
 export default abstract class Job implements Identifiable<Job>{
-    name: String;
+    name: string;
+    id:string;
 
-    constructor(name: String){
+    constructor(id:string,name: string){
         this.name=name;
+        this.id = id;
     }
 
     equals(other:Job){
@@ -64,7 +66,7 @@ export abstract class BaseJob extends Job{
 
 export class Unemployed extends BaseJob{
     constructor(){
-        super("Unemployed");
+        super("unemployed","Unemployed");
     }
     estimateGoodness(person:Agent) : number{
         return 0+(person.age>13 ? 0 : 100);
@@ -73,7 +75,7 @@ export class Unemployed extends BaseJob{
 
 export class Lumberjack extends BaseJob{
     constructor(){
-        super("Lumberjack");
+        super("lumberjack","Lumberjack");
     }
     estimateGoodness(person:Agent){
         //from -13.5 to 100
@@ -91,7 +93,7 @@ export class Lumberjack extends BaseJob{
 
 export class Carpenter extends BaseJob{
     constructor(){
-        super("Carpenter");
+        super("carpenter","Carpenter");
     }
     estimateGoodness(person:Agent){
         //from -13.5 to 100
@@ -105,7 +107,7 @@ export class Carpenter extends BaseJob{
 
 export class Hunter extends Job{
     constructor(){
-        super("Hunter");
+        super("hunter","Hunter");
     }
     estimateGoodness(person:Agent){
         //from -13.5 to 100
@@ -130,7 +132,7 @@ export class Hunter extends Job{
 
 export class Merchant extends BaseJob{
     constructor(){
-        super("Merchant")
+        super("merchant","Merchant")
     }
     estimateGoodness(person: Agent): number {
         const wordWeight=.5;
@@ -145,7 +147,7 @@ export class Merchant extends BaseJob{
 
 export class Farmer extends BaseJob{
     constructor(){
-        super("Farmer");
+        super("farmer","Farmer");
     }
     estimateGoodness(person:Agent){
         return person.stats[Stat.Bulwark] * 3.33;
@@ -163,7 +165,7 @@ export class Farmer extends BaseJob{
 
 export class Administrator extends BaseJob{
     constructor(){
-        super("Administrator");
+        super("administrator","Administrator");
     }
     estimateGoodness(person:Agent){
         return person.stats[Stat.Academia] * 10;
@@ -177,4 +179,5 @@ export const Jobs={
     Administrator: new Administrator(), 
     Carpenter: new Carpenter(),
     Unemployed: new Unemployed(),
+    Merchant: new Merchant(),
 };
