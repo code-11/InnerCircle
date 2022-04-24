@@ -1,0 +1,47 @@
+{
+    "data":{
+        "favor":[
+            "Leader",
+            "Patriarch",
+            "Bishop",
+            "Deacon",
+            "Monk"
+        ],
+        "bulwark":[
+            "Leader",
+            "Royal Guard",
+            "Elite",
+            "Veteran",
+            "Recruit"
+        ],
+        "academia":[
+            "Leader",
+            "Royal Scholar",
+            "Academician",
+            "Professor",
+            "Neophyte"
+        ],
+        "wordcraft":[
+            "Leader",
+            "High Counselor",
+            "Counselor",
+            "Adjunct",
+            "Servant"
+        ],
+        "precepts":[
+            "Leader",
+            "High Judge",
+            "Judge",
+            "Lawyer",
+            "Scribe"
+        ],
+        "scan":[
+            "Leader",
+            "Spymaster",
+            "Spy",
+            "Informant",
+            "Footpad"
+        ]
+
+    }
+}

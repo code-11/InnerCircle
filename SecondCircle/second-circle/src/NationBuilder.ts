@@ -4,13 +4,7 @@ import LeaderJob from "./LeaderJob";
 
 type MarriageData={[key:number]:{citizen:Agent,other:Agent | null,score:number}};
 
-export const EXPERT_NAMES=new Map<Stat, string>([
-    [Stat.Favor,"Patriarch"],
-    [Stat.Bulwark,"Royal Guard"],
-    [Stat.Academia,"Royal Scholar"],
-    [Stat.Wordcraft,"Counselor"],
-    [Stat.Precepts,"High Judge"],
-]);
+export const STARTING_CITIZENS=100;
 
 export const BestAgent = (a:Agent|null, b:Agent,attributeGetter:(agent:Agent)=>number) =>{
     if (a ==null){
@@ -88,7 +82,7 @@ export class NationBuilder{
 
     createCitizenry(){
         //Create some people
-        for (let i=0;i<100;i+=1){
+        for (let i=0;i<STARTING_CITIZENS;i+=1){
             this.citizens.push(rndAgent(i));
         }
         this.citizens.sort(NationBuilder.plutocracy.leaderSort);

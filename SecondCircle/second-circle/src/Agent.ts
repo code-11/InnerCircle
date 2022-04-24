@@ -28,7 +28,23 @@ export interface AgentStats{
     [Stat.Scan]:number;
     [Stat.Health]: number;
 }
-
+export const strToStat=(strStat:string)=>{
+    if (strStat=="favor"){
+        return Stat.Favor;
+    }else if (strStat=="bulwark"){
+        return Stat.Bulwark;
+    }else if (strStat=="academia"){
+        return Stat.Academia;
+    }else if (strStat=="wordcraft"){
+        return Stat.Wordcraft;
+    }else if (strStat=="precepts"){
+        return Stat.Precepts;
+    }else if (strStat=="scan"){
+        return Stat.Scan;
+    }else{
+        throw `Unexpected strStat ${strStat}`;
+    }
+}
 export const ADULT_AGE=13; //Anyone older than 13 is an adult
 
 const agentStatsToString=(input:AgentStats)=>{
