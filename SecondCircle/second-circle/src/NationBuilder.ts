@@ -43,7 +43,7 @@ export class NationBuilder{
     }
 
     static plutocracy : any = {
-        leaderSort : (a:Agent,b:Agent)=>Math.sign(b.stats[Stat.Wealth]-a.stats[Stat.Wealth]),
+        leaderSort : (a:Agent,b:Agent)=>Math.sign(b.stats.wealth-a.stats.wealth),
     }
 
     static meritocracy = {

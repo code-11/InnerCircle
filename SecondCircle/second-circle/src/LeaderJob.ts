@@ -1,4 +1,4 @@
-import Agent, { strToStat } from "./Agent";
+import Agent, { Stat } from "./Agent";
 import Powerflow from "./Powerflow";
 import {BestAgent} from "./NationBuilder";
 import Job, { Jobs, JobTask, Placeholder } from "./Job";
@@ -35,7 +35,7 @@ export default class LeaderJob extends Job{
                     perform:()=>{
                         let best : Agent | null=agents[0];
                         for (const agent of agents){
-                            const statGetter:(agent:Agent)=>number=(agent)=>agent.stats[strToStat(stat)];
+                            const statGetter:(agent:Agent)=>number=(agent)=>agent.stats[<Stat>stat];
                             best=BestAgent(best,agent,statGetter);
                         }
                         if (best!=undefined){

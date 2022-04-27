@@ -35,7 +35,7 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
                 citizen.giveItem(Commodity.Food.some(100));
             }
             //There probably shouldn't be competeing places to store wealth...
-            const citizenWealth=citizen.stats[Stat.Wealth];
+            const citizenWealth=citizen.stats.wealth;
             citizen.giveItem(Commodity.Money.some(citizenWealth));
         }
     }
@@ -193,10 +193,10 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
 
             let budget = 0;
             for (const familyMember of payingfamilyMembers){
-                const contribution = familyMember.stats[Stat.Wealth] * realEstateRate;
+                const contribution = familyMember.stats.wealth * realEstateRate;
                 budget+=contribution;
                 if (familyHead.title!="Leader"){
-                    familyMember.stats[Stat.Wealth]-=contribution;
+                    familyMember.stats.wealth-=contribution;
                 }
             }
 

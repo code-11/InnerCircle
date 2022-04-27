@@ -1,0 +1,9 @@
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.stats{
+    display:flex;
+    gap:10px;
+}

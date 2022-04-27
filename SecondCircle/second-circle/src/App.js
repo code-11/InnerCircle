@@ -6,6 +6,8 @@ import { Component } from 'react';
 import Simulation from './Simulation';
 import PowerflowVis from "./PowerflowVis";
 import TimeControls from "./TimeControls";
+import Agent from './Agent';
+import AgentList from './AgentList';
 
 export default class App extends Component{
 
@@ -30,11 +32,12 @@ export default class App extends Component{
     this.simulation.play(nation.citizens,powerflow);
     this.setState({
       powerflow:powerflow,
+      citizens:nation.citizens,
     })
   }
 
   render(){
-    const {mapData, powerflow}=this.state;
+    const {mapData,citizens, powerflow}=this.state;
     return (
       <div className="App">
         {/* <LocalMap class="local-map-wrapper" mapData={mapData}/> */}
@@ -49,6 +52,7 @@ export default class App extends Component{
               (i)=>{}}
         />
         <PowerflowVis powerflow={powerflow} />
+        <AgentList agents={citizens?citizens:[]}/>
       </div>
     );
   }
