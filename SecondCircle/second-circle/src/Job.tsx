@@ -64,6 +64,18 @@ export abstract class BaseJob extends Job{
     }
 }
 
+export class FoodTheif extends BaseJob{
+    constructor(){
+        super("foodTheif","Food Theif");
+    }
+    estimateGoodness(person: Agent): number {
+        const consecNoFoodVal = Math.min(person.consecNoFood,6) * 2 //0-12
+        const preceptsVal = person.stats.precepts //-2 -> 10 
+        const diff=consecNoFoodVal-preceptsVal //-10 to 14
+        return diff * (101/14) // -72 to 101
+    }
+}
+
 export class Unemployed extends BaseJob{
     constructor(){
         super("unemployed","Unemployed");
@@ -134,13 +146,14 @@ export class Merchant extends BaseJob{
     constructor(){
         super("merchant","Merchant")
     }
+
     estimateGoodness(person: Agent): number {
         const wordWeight=.5;
         const scanWeight=.1;
         const wealthWeight=.4;
         const wordVal =  person.stats.wordcraft * wordWeight * 10;
         const scanVal =  person.stats.scan * scanWeight * 10;
-        const wealthVal = person.stats.wealth * wealthWeight;
+        const wealthVal = Math.floor((person.stats.wealth/7000) * 10) * wealthWeight;
         return wordVal + scanVal + wealthVal;
     }
 }
@@ -180,4 +193,5 @@ export const Jobs={
     Carpenter: new Carpenter(),
     Unemployed: new Unemployed(),
     Merchant: new Merchant(),
+    FoodTheif: new FoodTheif(),
 };

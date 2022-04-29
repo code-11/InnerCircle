@@ -26,6 +26,15 @@ export class Commodity {
     }
 }
 
+export type Transaction={
+    providerId:number,
+    buyerId:number,
+    itemId:string,
+    amount:number,
+    money:number,
+    month:number,
+}
+
 export class market{
     suppliers : Array<{agent:Agent,price:number,amnt:number}>=[];
     depanders : Array<{agent:Agent,print:number,amnt:number}>=[];

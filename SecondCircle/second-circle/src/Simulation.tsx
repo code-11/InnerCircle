@@ -1,4 +1,4 @@
-import { Jobs, JobTask, Unemployed } from "./Job";
+import Job, { Jobs, JobTask, Unemployed } from "./Job";
 import { NationBuilder, Provider } from "./NationBuilder";
 import { choose, sum } from "./Utilities";
 import Agent, { ADULT_AGE, Stat } from "./Agent";
@@ -7,8 +7,9 @@ import { GeographyBuilder } from "./GeographyBuilder";
 import Powerflow from "./Powerflow";
 import Constants from "./Constants";
 import React from "react";
-import { Commodity } from "./Commodities";
+import { Commodity, Transaction } from "./Commodities";
 import { Item } from "./Item";
+import Counter from "./Counter";
 
 type SimulationState = {
     speed: number;
@@ -21,6 +22,8 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
     geography:GeographyBuilder;
     //AgentId:JobTask[]
     tasks:{[id:number]:JobTask[]};
+    transactionLog:Transaction[]=[];
+    month:number=1;
 
     constructor(nation:NationBuilder, geography:GeographyBuilder){
         super({});
@@ -41,21 +44,30 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
     }
 
     play(agents:Agent[],powerflow: Powerflow){
+        this.jobAssignment();
         this.assignDailyBaseTasks();
         const leader=powerflow.getHead();
-        if (leader !==null){
+        if (leader !==null && this.month==0){
             const tasks=leader.data.job.identifyThingsToDo(leader.data,agents,powerflow);
             for (const task of tasks){
                 task.perform();
             }
         }
+
+        const jobDist=new Counter<Job>();
+
         //TODO: Main play loop goes here?
         for (const citizen of this.nation.citizens){
             const citizenTasks=this.getTasks(citizen);
             for(const jobTask of citizenTasks){
                 jobTask.perform();
             }
+            jobDist.addElement(citizen.job);
+
+            citizen.evalHealth();
         }
+
+        console.log(jobDist);
     }
 
     buyFromProviders(providers:Provider[]){
@@ -70,6 +82,14 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
     }
 
     executeTrade(providerId:number,buyerId:number,itemId:string,amount:number,money:number){
+        const transaction={
+            providerId,
+            buyerId,
+            itemId,
+            amount,
+            money,
+            month:this.month
+        }
         const provider=this.nation.findCitizen(providerId);
         const buyer = this.nation.findCitizen(buyerId);
         if (provider!=undefined && buyer!=undefined){
@@ -77,6 +97,7 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
             buyer.giveItem(soldItem);
             const payment :Item = buyer.takeItemAmount(Commodity.Money.id,money);
             provider.giveItem(payment);
+            this.transactionLog.push(transaction);
         }
         
     }
@@ -130,23 +151,21 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
 
     jobAssignment(){
         for(const citizen of this.nation.citizens){
-            if (citizen.job.equals(Jobs.Unemployed)){
-                let bestChoice = Jobs.Unemployed;
-                let bestValue = Jobs.Unemployed.estimateGoodness(citizen); 
-                Object.entries(Jobs).forEach(([key, job]) => {
-                    const value = job.estimateGoodness(citizen);
-                    if (bestValue<value){
+            let bestChoice = Jobs.Unemployed;
+            let bestValue = Jobs.Unemployed.estimateGoodness(citizen); 
+            Object.entries(Jobs).forEach(([key, job]) => {
+                const value = job.estimateGoodness(citizen);
+                if (bestValue<value){
+                    bestChoice = job;
+                    bestValue= value;
+                }else if (bestValue===value){
+                    if(choose([true,false])){
                         bestChoice = job;
                         bestValue= value;
-                    }else if (bestValue===value){
-                        if(choose([true,false])){
-                            bestChoice = job;
-                            bestValue= value;
-                        }
-                    }    
-                });
-                citizen.job=bestChoice;
-            } 
+                    }
+                }    
+            });
+            citizen.job=bestChoice;
         }
     }
 

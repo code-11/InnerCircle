@@ -35,8 +35,10 @@ export default class LeaderJob extends Job{
                     perform:()=>{
                         let best : Agent | null=agents[0];
                         for (const agent of agents){
-                            const statGetter:(agent:Agent)=>number=(agent)=>agent.stats[<Stat>stat];
-                            best=BestAgent(best,agent,statGetter);
+                            if (agent.job.equals(Jobs.Unemployed)){
+                                const statGetter:(agent:Agent)=>number=(agent)=>agent.stats[<Stat>stat];
+                                best=BestAgent(best,agent,statGetter);
+                            }
                         }
                         if (best!=undefined){
                             const newPowerflowNode=powerflow.addChild(leader,best)

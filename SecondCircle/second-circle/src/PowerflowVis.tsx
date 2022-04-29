@@ -57,8 +57,6 @@ export default class PowerflowVis extends React.Component<PowerflowVisProps> {
       //   }
       // }
   
-      return <div className="powerflow-wrapper">
-        <CytoscapeComponent layout={layout} elements={elements} style={ { backgroundColor:"blue", width: '1600px', height: '800px' } } />
-      </div>;
+      return <CytoscapeComponent layout={layout} elements={elements} style={ { backgroundColor:"blue", width: '60vw', height: '50vh' } } />
     }
   }

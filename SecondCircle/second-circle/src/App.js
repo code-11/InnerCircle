@@ -8,6 +8,8 @@ import PowerflowVis from "./PowerflowVis";
 import TimeControls from "./TimeControls";
 import Agent from './Agent';
 import AgentList from './AgentList';
+import Counter from './Counter';
+import Job from './Job';
 
 export default class App extends Component{
 
@@ -33,15 +35,21 @@ export default class App extends Component{
     this.setState({
       powerflow:powerflow,
       citizens:nation.citizens,
-    })
+    });
   }
 
   render(){
     const {mapData,citizens, powerflow}=this.state;
+    const onAdvance=()=>{
+      if (this.simulation) this.simulation.play(citizens,powerflow);
+    }
+    const onInfo=()=>{
+      if (citizens) console.log(citizens);
+    }
     return (
       <div className="App">
         {/* <LocalMap class="local-map-wrapper" mapData={mapData}/> */}
-        <TimeControls 
+        {/*<TimeControls 
           speed={
             this.simulation!=undefined?
               this.simulation.speed:
@@ -50,8 +58,10 @@ export default class App extends Component{
             this.simulation!=undefined?
               (speed)=>this.simulation.onSetSpeed(speed):
               (i)=>{}}
-        />
-        <PowerflowVis powerflow={powerflow} />
+          />*/}
+          <button onClick={onAdvance}> Next Month</button>
+          <button onClick={onInfo}> Info </button>
+        <PowerflowVis powerflow={powerflow}/>
         <AgentList agents={citizens?citizens:[]}/>
       </div>
     );

@@ -1,10 +1,11 @@
 import {getRandomInt, fakePareto, triangleProb, choose } from "./Utilities";
 import maleHumanNames from "./data/maleHumanNames.json";
 import femaleHumanNames from "./data/femaleHumanNames.json";
-import Job, { Unemployed, JobTask } from "./Job";
+import Job, { Unemployed, JobTask, Jobs } from "./Job";
 import ImmobileHolding from "./ImmobileHolding";
 import { Item } from "./Item";
 import { Inventory } from "./Inventory";
+import { Commodity } from "./Commodities";
 
 
 export type Sex= "M" | "F";
@@ -48,7 +49,7 @@ export const rndAgent=(id:number,name:string|null=null, title:string="Commoner")
     const bulwark=triangleProb(-2,15);
     const academia=fakePareto(1,10);
     const wordcraft=triangleProb(1,10);
-    const precepts=triangleProb(1,10);
+    const precepts=triangleProb(-2,10);
     const scan = triangleProb(1,10);
     const age = getRandomInt(50)+fakePareto(0,50,3);
     const wealth = (age>13) ? fakePareto(1,7000,5) : triangleProb(1,10);
@@ -72,7 +73,7 @@ export const marriageScore=(a :Agent, b:Agent)=>{
     const ageScore = (100-Math.abs(a.age-b.age))*2; //0-200
     const moneyScore =Math.abs(200 - (Math.floor(Math.log10(Math.abs(a.stats.wealth-b.stats.wealth)+.001))*50)); //200
     const wordScore = Math.max(a.stats.wordcraft,b.stats.wordcraft) * 10; //100
-    const preceptsScore = Math.sign(a.stats.precepts===0 ? 1 : a.stats.precepts) === Math.sign(b.stats.precepts===0 ? 1 : b.stats.precepts) ? 100 : 0; // 0 or 100
+    const preceptsScore = 100 - (Math.abs(a.stats.precepts-b.stats.precepts) * (100/17)); //0-100
     return desireScore + sexScore + absoluteAge + ageScore + moneyScore + wordScore + preceptsScore;
 
 }
@@ -90,7 +91,7 @@ export default class Agent{
     
     desireToMarry : number = 0;
 
-    job: Job = new Unemployed();
+    job: Job = Jobs.Unemployed;
 
     parents:Agent[]=[];
     children: Agent[]=[];
@@ -101,6 +102,9 @@ export default class Agent{
     carried: Inventory = new Inventory();
 
     todo:JobTask[]=[];
+    trades=[];
+
+    consecNoFood=0;
 
     stats = {
         "favor": 5,
@@ -121,6 +125,17 @@ export default class Agent{
         this.sex=sex;
         this.desireToMarry=desireToMarry;
         this.stats=stats;
+    }
+
+    evalHealth(){
+        if(this.carried.getItemAmount(Commodity.Food.id,0)<1){
+            //Uhoh, looks you're going to starve a little bit :(
+            this.stats.health-=10;
+            this.consecNoFood+=1;
+            console.log(`${this.name} has gone hungry`);
+        }else{
+            this.consecNoFood=0;
+        }
     }
 
     giveItem(item:Item){
