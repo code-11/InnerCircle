@@ -12,9 +12,13 @@ export default class AgentListItem extends React.Component<AgentListItemProps>{
         super(props)
     }
 
+    statId(stat:Stat,agent:Agent){
+        return `${agent.id}-${stat}`;
+    }
+
     renderStatItem(stat:Stat){
         const statVal=this.props.agent.stats[stat];
-        return <div>
+        return <div key={this.statId(stat,this.props.agent)}>
             <p>{`${stat}:${statVal}`}</p>
         </div>    
     }
@@ -22,20 +26,20 @@ export default class AgentListItem extends React.Component<AgentListItemProps>{
     renderStatList(){
         const allStats = Object.keys(this.props.agent.stats);
         const strToStat=(inputStr:string):Stat=>inputStr as Stat; 
-        return <div className="stats">
+        return <div className="flexGap">
             {allStats.map((statStr)=>this.renderStatItem(strToStat(statStr)))}
         </div>
     }
 
     render(){
         const {agent}=this.props;
-        return <div className="stats">
-            <div>{agent.name}</div>
-            <div>{agent.alive?"":"Dead"}</div>
-            <div>{agent.sex}</div>
-            <div>{agent.age}</div>
-            <div>{agent.job.name}</div>
-            <div>{this.renderStatList()}</div>
+        return <div key={agent.id} className="flexGap">
+            <div key="name">{agent.name}</div>
+            <div key="alive">{agent.alive?"":"Dead"}</div>
+            <div key="sex">{agent.sex}</div>
+            <div key="age">{agent.age}</div>
+            <div key="job-name">{agent.job.name}</div>
+            <div key="stats">{this.renderStatList()}</div>
         </div>
 
     }

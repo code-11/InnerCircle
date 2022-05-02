@@ -42,6 +42,9 @@ export default class App extends Component{
     const {mapData,citizens, powerflow}=this.state;
     const onAdvance=()=>{
       if (this.simulation) this.simulation.play(citizens,powerflow);
+      this.setState({
+        citizens:citizens
+      })
     }
     const onInfo=()=>{
       if (citizens) console.log(citizens);

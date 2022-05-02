@@ -1,4 +1,4 @@
-import {getRandomInt, fakePareto, triangleProb, choose } from "./Utilities";
+import {getRandomInt, fakePareto, triangleProb, choose, sortByFunc } from "./Utilities";
 import maleHumanNames from "./data/maleHumanNames.json";
 import femaleHumanNames from "./data/femaleHumanNames.json";
 import Job, { Unemployed, JobTask, Jobs } from "./Job";
@@ -18,6 +18,9 @@ export type Stat =
     "precepts"|
     "scan"|
     "health";
+export const StatList:Stat[]=[
+    "favor","bulwark","academia","wealth","wordcraft","precepts","scan","health"
+]
 
 export interface AgentStats{
     "favor" : number;
@@ -125,6 +128,24 @@ export default class Agent{
         this.sex=sex;
         this.desireToMarry=desireToMarry;
         this.stats=stats;
+    }
+
+
+
+    static displayPropertyComparators(){
+        const numComp=(a:number,b:number)=>a-b;
+        const concreteAttrs=[{id:"name",func:(arr:Agent[])=>sortByFunc(arr,(agent)=>agent.name)},
+        {id:"alive",func:(arr:Agent[])=>sortByFunc(arr,(agent)=>agent.alive)},
+        {id:"sex",func:(arr:Agent[])=>sortByFunc(arr,(agent)=>agent.sex)},
+        {id:"age",func:(arr:Agent[])=>sortByFunc(arr,(agent)=>agent.age,numComp)},
+        {id:"jobName",func:(arr:Agent[])=>sortByFunc(arr,(agent)=>agent.job?.name)}];
+        const dynamicAttrs=StatList.map((stat)=>{
+            return {
+                id:stat,
+                func:(arr:Agent[])=>sortByFunc(arr,(agent)=>agent.stats[stat],numComp)
+            }
+        });
+        return concreteAttrs.concat(dynamicAttrs);
     }
 
     evalHealth(){

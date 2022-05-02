@@ -3,7 +3,7 @@ p {
     padding: 0;
 }
 
-.stats{
+.flexGap{
     display:flex;
     gap:10px;
 }

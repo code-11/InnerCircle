@@ -45,3 +45,14 @@ export const fakePareto = (min:number, max:number, pointiness=3) =>{
     }
     return Math.round(total+min);
 }
+
+export const sortByFunc = <E,V>(arr:Array<E>,getter:(el:E)=>V,compFunc?:(a:V,b:V)=>number) =>{
+    const valueList:Array<V>=arr.map(getter)
+    const zippedPairs:Array<[V,E]>=valueList.map((val,i)=>[val,arr[i]]);
+    if (compFunc){
+        zippedPairs.sort((pair1,pair2)=>compFunc(pair1[0],pair2[0]));
+    }else{
+        zippedPairs.sort();
+    }
+    return zippedPairs.map((pair)=>pair[1]);
+}

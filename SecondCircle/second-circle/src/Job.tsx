@@ -64,9 +64,9 @@ export abstract class BaseJob extends Job{
     }
 }
 
-export class FoodTheif extends BaseJob{
+export class FoodThief extends BaseJob{
     constructor(){
-        super("foodTheif","Food Theif");
+        super("foodThief","Food Thief");
     }
     estimateGoodness(person: Agent): number {
         const consecNoFoodVal = Math.min(person.consecNoFood,6) * 2 //0-12
@@ -193,5 +193,5 @@ export const Jobs={
     Carpenter: new Carpenter(),
     Unemployed: new Unemployed(),
     Merchant: new Merchant(),
-    FoodTheif: new FoodTheif(),
+    FoodThief: new FoodThief(),
 };
