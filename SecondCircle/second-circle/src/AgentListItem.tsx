@@ -2,6 +2,7 @@ import { times } from "lodash";
 import React from "react";
 import Agent, { Stat } from "./Agent";
 import './AgentListItem.css';
+import { Commodity } from "./Commodities";
 
 type AgentListItemProps = {
     agent: Agent;
@@ -40,6 +41,8 @@ export default class AgentListItem extends React.Component<AgentListItemProps>{
             <div key="age">{agent.age}</div>
             <div key="job-name">{agent.job.name}</div>
             <div key="stats">{this.renderStatList()}</div>
+            <div key="consecNoFood">{agent.consecNoFood}</div>
+            <div key="food">{agent.getAmountItem(Commodity.Food.id)}</div>
         </div>
 
     }

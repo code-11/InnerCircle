@@ -6,6 +6,7 @@ import ImmobileHolding from "./ImmobileHolding";
 import { Item } from "./Item";
 import { Inventory } from "./Inventory";
 import { Commodity } from "./Commodities";
+import Constants from "./Constants";
 
 
 export type Sex= "M" | "F";
@@ -145,18 +146,34 @@ export default class Agent{
                 func:(arr:Agent[])=>sortByFunc(arr,(agent)=>agent.stats[stat],numComp)
             }
         });
-        return concreteAttrs.concat(dynamicAttrs);
+        const tempAttrs=[
+            {id: "consecNoFood",func:(arr:Agent[])=>sortByFunc(arr,(agent)=>agent.consecNoFood,numComp)},
+            {id: "food",func:(arr:Agent[])=>sortByFunc(arr,(agent)=>agent.getAmountItem(Commodity.Food.id),numComp)},
+        ]
+        return concreteAttrs.concat(dynamicAttrs).concat(tempAttrs);
     }
 
     evalHealth(){
         if(this.carried.getItemAmount(Commodity.Food.id,0)<1){
             //Uhoh, looks you're going to starve a little bit :(
-            this.stats.health-=10;
-            this.consecNoFood+=1;
-            console.log(`${this.name} has gone hungry`);
+            const newHealth = this.stats.health-10;
+            if (newHealth<0){
+                this.stats.health=0;
+                this.alive=false;
+                console.log(`${this.name} has died`);
+            }else{
+                this.stats.health-=10;
+                this.consecNoFood+=1;
+                console.log(`${this.name} has gone hungry`);
+            }
         }else{
+            this.takeItemAmount(Commodity.Food.id,Constants.FOOD_PER_DAY)
             this.consecNoFood=0;
         }
+    }
+
+    getAmountItem(itemId:string){
+        return this.carried.getItemAmount(itemId,0);
     }
 
     giveItem(item:Item){
