@@ -29,7 +29,6 @@ export type Provider={
 }
 
 export class NationBuilder{
-
     citizens : Array<Agent> = [];
 
     leader : Agent|null = null;

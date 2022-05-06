@@ -105,7 +105,6 @@ export default class Agent{
 
     carried: Inventory = new Inventory();
 
-    todo:JobTask[]=[];
     trades=[];
 
     consecNoFood=0;

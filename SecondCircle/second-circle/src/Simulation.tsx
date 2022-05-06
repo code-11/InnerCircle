@@ -45,10 +45,10 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
 
     play(agents:Agent[],powerflow: Powerflow){
         this.jobAssignment();
-        this.assignDailyBaseTasks();
+        this.assignDailyBaseTasks(powerflow);
         const leader=powerflow.getHead();
         if (leader !==null && this.month==0){
-            const tasks=leader.data.job.identifyThingsToDo(leader.data,agents,powerflow);
+            const tasks=leader.data.job.identifyThingsToDo(leader.data,agents,powerflow,this.nation);
             for (const task of tasks){
                 task.perform();
             }
@@ -62,6 +62,8 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
             for(const jobTask of citizenTasks){
                 jobTask.perform();
             }
+            this.clearTasks(citizen);
+
             jobDist.addElement(citizen.job);
 
             citizen.evalHealth();
@@ -110,11 +112,11 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
                 const foodAmnt = citizen.carried.getItemAmount(Commodity.Food.id,0);
                 const moneyAmnt = citizen.carried.getItemAmount(Commodity.Money.id,0);
                 const foodDiff = Math.max(Constants.FOOD_BUFFER-foodAmnt,0);
-                if (foodDiff>0 && moneyAmnt>0){
+                if (foodDiff>0 && moneyAmnt>=1){
                     //If not see if have enough money for food.
                     const foodPrice=Commodity.price(Commodity.Food);
                     //Try to buy all the food you want
-                    const buyAmnt =  Math.min(moneyAmnt/foodPrice,foodDiff);
+                    const buyAmnt = Math.floor(Math.min(moneyAmnt/foodPrice,foodDiff));
                     const providers=this.nation.findServicesWithItemAmnt(Commodity.Food.id,buyAmnt,Jobs.Merchant.id);
                     for (const provider of providers){
                         this.executeTrade(provider.agentId, citizen.id, Commodity.Food.id, provider.itemAmnt, provider.itemAmnt * foodPrice);
@@ -122,6 +124,10 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
                 }
             }
         }
+    }
+
+    clearTasks(citizen:Agent){
+        this.tasks[citizen.id]=[];
     }
 
     getTasks(citizen:Agent){
@@ -142,19 +148,32 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
         }
     }
 
-    assignDailyBaseTasks(){
+    assignTasks(citizen:Agent, newTasks:JobTask[]){
+        const taskList=this.tasks[citizen.id];
+        if (taskList===undefined){
+            this.tasks[citizen.id]=newTasks.slice();
+        }else{
+            this.tasks[citizen.id]=this.tasks[citizen.id].concat(newTasks)
+        }
+    }
+
+    assignDailyBaseTasks(powerflow:Powerflow){
         //TODO: Groups, including family/spouse should pool resources
         for (const citizen of this.nation.citizens){
             this.assignTask(citizen,this.getFoodCheckTask(citizen));
+            this.assignTasks(citizen,citizen.job.identifyThingsToDo(citizen,this.nation.citizens,powerflow,this.nation))
         }
     }
 
     jobAssignment(){
         for(const citizen of this.nation.citizens){
             let bestChoice = Jobs.Unemployed;
+            const values:{[key:string]:number}={};
             let bestValue = Jobs.Unemployed.estimateGoodness(citizen); 
+            values[Jobs.Unemployed.id]=bestValue;
             Object.entries(Jobs).forEach(([key, job]) => {
                 const value = job.estimateGoodness(citizen);
+                values[job.id]=value;
                 if (bestValue<value){
                     bestChoice = job;
                     bestValue= value;
