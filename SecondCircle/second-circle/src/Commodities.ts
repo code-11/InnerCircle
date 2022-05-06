@@ -32,6 +32,7 @@ export type Transaction={
     itemId:string,
     amount:number,
     money:number,
+    forced:boolean,
     month:number,
 }
 

@@ -3,6 +3,8 @@ import Identifiable from "./Identifiable";
 import {Commodity} from "./Commodities";
 import Powerflow from "./Powerflow";
 import { NationBuilder } from "./NationBuilder";
+import Constants from "./Constants";
+import Simulation from "./Simulation";
 
 /**
  * Time exists on a 100 units -> 12 hr system.
@@ -41,12 +43,12 @@ export default abstract class Job implements Identifiable<Job>{
         return {};
     }    
 
-    abstract identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow, nation:NationBuilder):Array<JobTask>
+    abstract identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow, nation:NationBuilder, simulation:Simulation):Array<JobTask>
 
 }
 
 export class Placeholder extends Job{
-    identifyThingsToDo(agent: Agent,agents:Agent[], powerflow: Powerflow, nation:NationBuilder): JobTask[] {
+    identifyThingsToDo(agent: Agent,agents:Agent[], powerflow: Powerflow, nation:NationBuilder, simulation:Simulation): JobTask[] {
         return [{
             description:"placeholder",
             perform:()=>{},
@@ -57,7 +59,7 @@ export class Placeholder extends Job{
 export abstract class BaseJob extends Job{
     abstract estimateGoodness(person:Agent) : number;
 
-    identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow, nation:NationBuilder): JobTask[]{
+    identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow, nation:NationBuilder, simulation:Simulation): JobTask[]{
         return [{
             description:"toil",
             perform:()=>{}
@@ -75,11 +77,16 @@ export class FoodThief extends BaseJob{
         const diff=consecNoFoodVal-preceptsVal //-10 to 18
         return diff * (101/9) //-56 to 101
     }
-    identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow, nation:NationBuilder): JobTask[]{
+    
+    identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow, nation:NationBuilder, simulation:Simulation): JobTask[]{
         return [{
             description: "Steal Food",
             perform:()=>{
-                
+                const amountFoodDesired=Constants.FOOD_BUFFER;
+                const providers=nation.findServicesWithItemAmnt(Commodity.Food.id,amountFoodDesired,Jobs.Merchant.id);
+                for (const provider of providers){
+                    simulation.executeForceTrade(agent.id, provider.agentId, provider.itemId, provider.itemAmnt)
+                }
             }
         }]
     }
@@ -102,7 +109,7 @@ export class Lumberjack extends BaseJob{
         //from -13.5 to 100
         return person.stats.bulwark * 6.66;
     }
-    identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow, nation:NationBuilder): JobTask[]{
+    identifyThingsToDo(agent:Agent,agents:Agent[],powerflow:Powerflow, nation:NationBuilder, simulation:Simulation): JobTask[]{
         return [{
             description:"Chop trees",
             perform:()=>{
@@ -141,7 +148,7 @@ export class Hunter extends Job{
         return bulVal + scanVal + preceptVal;
     }
 
-    identifyThingsToDo(agent: Agent,agents:Agent[], powerflow: Powerflow, nation:NationBuilder): JobTask[] {
+    identifyThingsToDo(agent: Agent,agents:Agent[], powerflow: Powerflow, nation:NationBuilder, simulation:Simulation): JobTask[] {
         return [{
             description:"Hunt",
             perform:()=>{
@@ -174,7 +181,7 @@ export class Farmer extends BaseJob{
     estimateGoodness(person:Agent){
         return person.stats.bulwark * 3.33;
     }
-    identifyThingsToDo(agent: Agent,agents:Agent[], powerflow: Powerflow, nation:NationBuilder): JobTask[] {
+    identifyThingsToDo(agent: Agent,agents:Agent[], powerflow: Powerflow, nation:NationBuilder, simulation:Simulation): JobTask[] {
         return [{
             description:"Farm",
             perform:()=>{

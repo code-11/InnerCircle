@@ -48,7 +48,7 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
         this.assignDailyBaseTasks(powerflow);
         const leader=powerflow.getHead();
         if (leader !==null && this.month==0){
-            const tasks=leader.data.job.identifyThingsToDo(leader.data,agents,powerflow,this.nation);
+            const tasks=leader.data.job.identifyThingsToDo(leader.data,agents,powerflow,this.nation,this);
             for (const task of tasks){
                 task.perform();
             }
@@ -72,17 +72,6 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
         console.log(jobDist);
     }
 
-    buyFromProviders(providers:Provider[]){
-        for (const provider of providers){
-            const citizen = this.nation.findCitizen(provider.agentId);
-            if (citizen ===undefined){
-                throw `Tried to buy from ${provider.agentId} but this id didn't exist`;
-            }else{
-                citizen.takeItemAmount(provider.itemId,provider.itemAmnt);
-            }
-        }
-    }
-
     executeTrade(providerId:number,buyerId:number,itemId:string,amount:number,money:number){
         const transaction={
             providerId,
@@ -90,7 +79,8 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
             itemId,
             amount,
             money,
-            month:this.month
+            month:this.month,
+            forced:false
         }
         const provider=this.nation.findCitizen(providerId);
         const buyer = this.nation.findCitizen(buyerId);
@@ -100,8 +90,26 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
             const payment :Item = buyer.takeItemAmount(Commodity.Money.id,money);
             provider.giveItem(payment);
             this.transactionLog.push(transaction);
+        }  
+    }
+
+    executeForceTrade(sourceAgentId:number, targetAgentId:number, itemId:string,amount:number){
+        const transaction={
+            providerId:targetAgentId,
+            buyerId:sourceAgentId,
+            itemId,
+            amount,
+            money:0,
+            month:this.month,
+            forced:true
         }
-        
+        const sourceAgent=this.nation.findCitizen(sourceAgentId);
+        const targetAgent=this.nation.findCitizen(targetAgentId);
+        if (sourceAgent!=undefined && targetAgent!=undefined){
+            const takenItem :Item = targetAgent.takeItemAmount(itemId,amount);
+            sourceAgent.giveItem(takenItem);
+            this.transactionLog.push(transaction);
+        }
     }
 
     getFoodCheckTask(citizen:Agent):JobTask{
@@ -161,7 +169,7 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
         //TODO: Groups, including family/spouse should pool resources
         for (const citizen of this.nation.citizens){
             this.assignTask(citizen,this.getFoodCheckTask(citizen));
-            this.assignTasks(citizen,citizen.job.identifyThingsToDo(citizen,this.nation.citizens,powerflow,this.nation))
+            this.assignTasks(citizen,citizen.job.identifyThingsToDo(citizen,this.nation.citizens,powerflow,this.nation,this))
         }
     }
 
