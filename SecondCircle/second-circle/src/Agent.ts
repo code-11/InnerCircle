@@ -5,8 +5,9 @@ import Job, { Unemployed, JobTask, Jobs } from "./Job";
 import ImmobileHolding from "./ImmobileHolding";
 import { Item } from "./Item";
 import { Inventory } from "./Inventory";
-import { Commodity } from "./Commodities";
+import { Commodity, Transaction } from "./Commodities";
 import Constants from "./Constants";
+import Simulation from "./Simulation";
 
 
 export type Sex= "M" | "F";

@@ -22,6 +22,7 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
     geography:GeographyBuilder;
     //AgentId:JobTask[]
     tasks:{[id:number]:JobTask[]};
+    reactionTasks:{[id:number]:JobTask[]};
     transactionLog:Transaction[]=[];
     month:number=1;
 
@@ -30,6 +31,7 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
         this.nation=nation;
         this.geography=geography;
         this.tasks={};
+        this.reactionTasks={};
     }
 
     assignStartingResources(){
@@ -67,6 +69,14 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
             jobDist.addElement(citizen.job);
 
             citizen.evalHealth();
+
+            this.reactionPhase(citizen);
+        }
+
+        for(const citizen of this.nation.citizens){
+            //Move reaction tasks to tasks
+            this.tasks[citizen.id]=this.reactionTasks[citizen.id];
+            this.clearReactionTasks(citizen);
         }
 
         console.log(jobDist);
@@ -134,8 +144,48 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
         }
     }
 
+    reactionPhase(agent:Agent){
+        //One part of reaction phase is to react to if you were stolen from or not
+        //There could be degrees of understanding your own situation based on scan and maybe your academia
+        //For now just let them know automatically
+        //Could also let them know if a family member has been stolen from
+        const isAForcedTransactionAgainstMe=(transaction:Transaction)=>{
+            return transaction.forced==true && transaction.providerId==agent.id;
+        }
+        const forcedTransactionsAgainstMe=this.transactionLog.filter(isAForcedTransactionAgainstMe);
+        for (const transaction of forcedTransactionsAgainstMe){
+            const stealerName = this.nation.findCitizen(transaction.buyerId)?.name;
+            const createHandleAccusationTask = (data:Transaction)=> {
+                return {
+                    description:"Handle complaint",
+                    priority:1,
+                    data:data,
+                    perform:()=>{
+                        console.log(`Leader handled complaint of ${stealerName} stealing from ${agent.name}`);
+                    }
+                }
+            }
+            const accusationTask = {
+                description:`Accuse ${stealerName} of stealing`,
+                priority:1,
+                perform:()=>{
+                    const leader=this.nation.getLeader();
+                    const handleAccusationTask=createHandleAccusationTask(transaction);
+                    if (leader!=null){
+                        this.assignReactionTasks(leader,[handleAccusationTask]);
+                    }            
+                }
+            }
+            this.assignReactionTasks(agent,[accusationTask]);
+        }
+    }
+
     clearTasks(citizen:Agent){
         this.tasks[citizen.id]=[];
+    }
+
+    clearReactionTasks(citizen:Agent){
+        this.reactionTasks[citizen.id]=[];
     }
 
     getTasks(citizen:Agent){
@@ -165,6 +215,15 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
         }
     }
 
+    assignReactionTasks(citizen:Agent, newTasks:JobTask[]){
+        const taskList=this.reactionTasks[citizen.id];
+        if (taskList===undefined){
+            this.reactionTasks[citizen.id]=newTasks.slice();
+        }else{
+            this.reactionTasks[citizen.id]=this.reactionTasks[citizen.id].concat(newTasks)
+        }
+    }
+
     assignDailyBaseTasks(powerflow:Powerflow){
         //TODO: Groups, including family/spouse should pool resources
         for (const citizen of this.nation.citizens){
@@ -175,6 +234,9 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
 
     jobAssignment(){
         for(const citizen of this.nation.citizens){
+            if (citizen.id==this.nation.getLeader()?.id){
+                continue;
+            }
             let bestChoice = Jobs.Unemployed;
             const values:{[key:string]:number}={};
             let bestValue = Jobs.Unemployed.estimateGoodness(citizen); 

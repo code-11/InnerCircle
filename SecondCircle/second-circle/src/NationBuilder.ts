@@ -53,6 +53,9 @@ export class NationBuilder{
         leaderSort : (a:Agent,b:Agent)=>Math.sign(b.age-a.age)
     }
 
+    getLeader(){
+        return this.leader;
+    }
 
     findCitizen(agentId:number){
         return this.citizens.find((citizen)=>citizen.id==agentId);
@@ -89,6 +92,7 @@ export class NationBuilder{
 
         tempCitizens[0].job = new LeaderJob("Plutarch");
         tempCitizens[0].title="Leader";
+        this.leader=tempCitizens[0];
 
         // console.log(tempCitizens.slice().map((ag)=>ag.toString()));
 
