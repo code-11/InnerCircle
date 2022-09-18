@@ -9,6 +9,10 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
+    <header>
+      <link href="https://www.dafontfree.net/embed/b2xkLWVuZ2xpc2gtdGV4dC1tdC1yZWd1bGFyJmRhdGEvMjYvby8xMzY5NDQvT0xELnR0Zg" rel="stylesheet" type="text/css"/>
+      <link href="https://www.dafontfree.net/embed/b2xkLWVuZ2xpc2gtY3lyLXJlZ3VsYXImZGF0YS8yNi9vLzEzNjkzMi9PbGRFbmdsaXNoQ3lyLnR0Zg" rel="stylesheet" type="text/css"/>
+    </header>
     <App />
   </React.StrictMode>
 );

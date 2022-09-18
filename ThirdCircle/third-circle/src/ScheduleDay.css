@@ -1,0 +1,18 @@
+.schedule-day-container{
+    flex: 1 1 0px;
+    display:flex;
+    flex-direction: column;
+    justify-content:space-evenly;
+}
+
+.schedule-day-action-container{
+    display: flex;
+    justify-content:space-between;
+    gap: 10px;
+}
+
+.schedule-day-action-button{
+    border: 1px solid black;
+    text-align: center;
+    cursor: pointer;
+}
