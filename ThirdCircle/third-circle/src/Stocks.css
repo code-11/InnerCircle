@@ -1,0 +1,13 @@
+.stocks-container{
+    padding: 30px;
+    flex-direction: column;
+    display: flex;
+    width:50%;
+    gap: 20px;
+}
+
+.stock-container{
+    display: flex;
+    justify-content:space-between;
+    gap: 20px;
+}
