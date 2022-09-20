@@ -11,3 +11,7 @@
     justify-content:space-between;
     gap: 20px;
 }
+
+.stock-image{
+    width:20px;
+}
