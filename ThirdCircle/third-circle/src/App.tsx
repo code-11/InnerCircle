@@ -40,12 +40,12 @@ function App() {
       </div>
       <div id="stocks">
         <Stocks stocks={[ 
-            {name:"Money", amount:0},
-            {name:"Ingredients", amount:0},
-            {name:"Prestige", amount:0},
+            {name:"Money", amount:0, iconPath:"coins-solid.png"},
+            {name:"Ingredients", amount:0, iconPath:"scroll-solid.png"},
+            {name:"Prestige", amount:0, iconPath: "star-solid.png"},
             {name:"Health", amount:0, iconPath: "staff-snake-solid.png"},
-            {name:"Stress", amount:0},
-            {name:"Religiousness", amount:0}
+            {name:"Stress", amount:0, iconPath: "star-of-life-solid.png"},
+            {name:"Religiousness", amount:0, iconPath: "hands-praying-solid.png"}
         ]}/>
       </div>
       <div id="next">
