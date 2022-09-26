@@ -2,16 +2,21 @@ import React from 'react';
 import './App.css';
 import ScheduleDay from './ScheduleDay';
 
-export default function WeekSchedule() {
+type WeekScheduleProp = {
+  setDragging:any,
+  isDragging:boolean,
+};
+
+export default function WeekSchedule(props:WeekScheduleProp) {
   return (
     <div className="week-schedule-container">
-      <ScheduleDay header="Monday"></ScheduleDay>
-      <ScheduleDay header="Tuesday"></ScheduleDay>
-      <ScheduleDay header="Wednesday"></ScheduleDay>
-      <ScheduleDay header="Thursday"></ScheduleDay>
-      <ScheduleDay header="Friday"></ScheduleDay>
-      <ScheduleDay header="Saturday"></ScheduleDay>
-      <ScheduleDay header="Sunday"></ScheduleDay>
+      <ScheduleDay isDragging={props.isDragging} setDragging={props.setDragging} header="Monday"></ScheduleDay>
+      <ScheduleDay isDragging={props.isDragging} setDragging={props.setDragging} header="Tuesday"></ScheduleDay>
+      <ScheduleDay isDragging={props.isDragging} setDragging={props.setDragging} header="Wednesday"></ScheduleDay>
+      <ScheduleDay isDragging={props.isDragging} setDragging={props.setDragging} header="Thursday"></ScheduleDay>
+      <ScheduleDay isDragging={props.isDragging} setDragging={props.setDragging} header="Friday"></ScheduleDay>
+      <ScheduleDay isDragging={props.isDragging} setDragging={props.setDragging} header="Saturday"></ScheduleDay>
+      <ScheduleDay isDragging={props.isDragging} setDragging={props.setDragging} header="Sunday"></ScheduleDay>
     </div>
   );
 }

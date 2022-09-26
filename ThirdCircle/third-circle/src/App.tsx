@@ -1,17 +1,17 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Stocks from './Stocks';
 import WeekSchedule from './WeekSchedule';
 import {activities, Activity} from './js/Activities';
 import ActivityTile from './ActivityTile';
 
-const makeActivityTile=(activity:Activity)=>{
-  return <ActivityTile label={`${activity.type} : ${activity.label}`}/>
+const makeActivityTile=(setDragging:any,activity:Activity)=>{
+  return <ActivityTile setDragging={setDragging} draggable={true} label={`${activity.type} : ${activity.label}`}/>
 }
 
 function App() {
-
-  const activityTiles=activities.map(makeActivityTile);
+  const [dragging, setDragging] = useState(false);
+  const activityTiles=activities.map((activity)=>makeActivityTile(setDragging,activity));
 
   return (
     <div id="App">
@@ -23,7 +23,7 @@ function App() {
         <h3>Summer</h3>
       </div>
       <div id="schedule">
-        <WeekSchedule/>
+        <WeekSchedule isDragging={dragging} setDragging={setDragging}/>
       </div>
       <div id="messages">
         <p>
