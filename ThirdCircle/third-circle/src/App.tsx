@@ -4,12 +4,16 @@ import Stocks from './Stocks';
 import WeekSchedule from './WeekSchedule';
 import {activities, Activity} from './js/Activities';
 import ActivityTile from './ActivityTile';
+import { AppState, makeAppStateDefault, bindAppState } from './AppState';
 
 const makeActivityTile=(setDragging:any,activity:Activity)=>{
   return <ActivityTile setDragging={setDragging} draggable={true} label={`${activity.type} : ${activity.label}`}/>
 }
 
 function App() {
+  const [appState, setState]=useState(makeAppStateDefault());
+  bindAppState(setState, appState);
+
   const [dragging, setDragging] = useState(false);
   const activityTiles=activities.map((activity)=>makeActivityTile(setDragging,activity));
 

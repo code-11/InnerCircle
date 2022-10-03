@@ -40,3 +40,7 @@ export function initializeWeek(){
 
     return {schedule:DAYS_OF_WEEK.map(initializeDay)}
 } 
+
+export function makeGameStateDefault(){
+    return initializeWeek();
+}
