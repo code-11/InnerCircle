@@ -14,5 +14,5 @@ export function makeAppStateDefault(){
 }
 
 export function bindAppState(setAppState:any, appState:AppState){
-    bindGuiState(setAppState,appState.guistate);
+    bindGuiState(setAppState,appState);
 }

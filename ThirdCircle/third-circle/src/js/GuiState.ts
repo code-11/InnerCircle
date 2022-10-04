@@ -1,3 +1,5 @@
+import { AppState } from "../AppState";
+
 export type GuiState = {
     isDragging:boolean,
     setDragging: any,
@@ -10,16 +12,16 @@ export function makeGuiStateDefault(){
     }
 }
 
-export function bindSetDragging(setState:any, guiState:GuiState){
+export function bindSetDragging(setAppState:any, appState:AppState){
     const setDragging=(dragging:boolean)=>{
-        const newState:GuiState={...guiState};
-        newState.isDragging=dragging;
-        setState(newState);
+        const newGuiState:GuiState={...appState.guistate};
+        newGuiState.isDragging=dragging;
+        setAppState({guistate:newGuiState, gamestate:appState.gamestate});
     }
-    guiState.setDragging=setDragging;
+    appState.guistate.setDragging=setDragging;
 
 }
 
-export function bindGuiState(setState:any, guiState:GuiState){
-    bindSetDragging(setState,guiState);
+export function bindGuiState(setAppState:any, appState:AppState){
+    bindSetDragging(setAppState,appState);
 }
