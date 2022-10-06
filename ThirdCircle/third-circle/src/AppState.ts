@@ -1,4 +1,4 @@
-import { GameState, makeGameStateDefault } from "./js/GameState";
+import { bindGameState, GameState, makeGameStateDefault } from "./js/GameState";
 import { bindGuiState, GuiState, makeGuiStateDefault } from "./js/GuiState";
 
 export type AppState ={
@@ -15,4 +15,5 @@ export function makeAppStateDefault(){
 
 export function bindAppState(setAppState:any, appState:AppState){
     bindGuiState(setAppState,appState);
+    bindGameState(setAppState,appState);
 }

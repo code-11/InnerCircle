@@ -1,3 +1,5 @@
+import { AppState } from "../AppState";
+
 export const SLEEP="SLEEP";
 export const PRAY="PRAY";
 
@@ -21,6 +23,7 @@ export type Day ={
 }
 
 export type GameState = {
+    assignActivity: (day: Day, activity: Activity) => void;
     schedule:Array<Day>
 };
 
@@ -38,9 +41,27 @@ export function initializeDay(name:string){
 
 export function initializeWeek(){
 
-    return {schedule:DAYS_OF_WEEK.map(initializeDay)}
+    return DAYS_OF_WEEK.map(initializeDay)
 } 
 
 export function makeGameStateDefault(){
-    return initializeWeek();
+    return {
+        schedule:initializeWeek(),
+        assignActivity:(day: Day, activity: Activity) => {}
+    }
+}
+
+export function bindAssignActivity(setAppState:any, appState:AppState){
+    const assignActivity=(day:Day, activity:Activity)=>{
+        const newGameState:GameState={...appState.gamestate};
+        const dayIndex=newGameState.schedule.findIndex((day1)=>day.name==day1.name)
+        const activityIndex=newGameState.schedule[dayIndex].activities.findIndex((activity1)=>activity1==null);
+        newGameState.schedule[dayIndex].activities[activityIndex]=activity
+        setAppState({guistate:appState.guistate, gamestate:newGameState});
+    }
+    appState.gamestate.assignActivity=assignActivity;
+}
+
+export function bindGameState(setAppState:any, appState:AppState){
+    bindAssignActivity(setAppState,appState);
 }
