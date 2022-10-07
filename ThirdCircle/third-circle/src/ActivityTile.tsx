@@ -1,5 +1,6 @@
 import './ActivityTile.css';
 import {drag, drop, allowDrop} from './js/DragDropUtililties';
+import { Activity, Day } from './js/GameState';
 
 type ActivityTileProp = {
     label: string,
@@ -8,12 +9,13 @@ type ActivityTileProp = {
     droppable?:boolean,
     setDragging?:any
     shadowed?:boolean,
+    dayBoundAssignActivity?:(activity: Activity) => void
 };
 
 export default function ActivityTile(props:ActivityTileProp) {
     const textAlignVal=props.textAlignCenter ? "center" : "left"; 
 
-    const onDrop = props.droppable ? (ev:any)=>drop(props.setDragging,ev) : undefined;
+    const onDrop = props.droppable ? (ev:any)=>drop(props.setDragging,ev, props.dayBoundAssignActivity) : undefined;
     const onDragOver = props.droppable ? allowDrop: undefined;
     const draggable = props.draggable;
     const onDragStart = props.draggable ? (ev:any)=>drag(props.setDragging,ev,props.label) : undefined; 

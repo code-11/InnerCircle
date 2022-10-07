@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { AppState } from './AppState';
-import { Day, GameState } from './js/GameState';
+import { Activity, Day, GameState } from './js/GameState';
 import { GuiState } from './js/GuiState';
 import ScheduleDay from './ScheduleDay';
 
@@ -10,12 +10,15 @@ type WeekScheduleProp = {
 };
 
 
-function makeDay(day:Day,guiState:GuiState){
-  return <ScheduleDay day={day} guiState={guiState}></ScheduleDay>
+function makeDay(
+  day:Day,
+  assignActivity:(day: Day, activity: Activity) => void,
+  guiState:GuiState){
+    return <ScheduleDay assignActivity={assignActivity} day={day} guiState={guiState}></ScheduleDay>
 }
 
 function makeDays(gameState:GameState, guiState:GuiState){
-  return gameState.schedule.map((day:Day) => makeDay(day,guiState));
+  return gameState.schedule.map((day:Day) => makeDay(day,gameState.assignActivity,guiState));
 }
 
 export default function WeekSchedule(props:WeekScheduleProp) {
