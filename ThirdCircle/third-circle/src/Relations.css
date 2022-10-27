@@ -1,17 +1,17 @@
-.stocks-container{
+.relations-container{
     padding: 30px;
-    flex-direction: row;
+    flex-direction: column;
     display: flex;
     width:50%;
-    gap:30px
+    gap: 20px;
 }
 
-.stock-container{
+.relation-container{
     display: flex;
     justify-content:space-between;
-    gap: 5px;
+    gap: 20px;
 }
 
-.stock-image{
+.relation-image{
     width:20px;
 }

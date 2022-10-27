@@ -6,6 +6,7 @@ import {allPossibleActivities} from './js/Activities';
 import ActivityTile from './ActivityTile';
 import {makeActivityTile} from './ScheduleDay';
 import { AppState, makeAppStateDefault, bindAppState } from './AppState';
+import Relations from './Relations';
 
 function App() {
   const [appState, setAppState]=useState(makeAppStateDefault());
@@ -41,11 +42,11 @@ function App() {
         <Stocks stocks={[ 
             {name:"Money", amount:0, iconPath:"coins-solid.png"},
             {name:"Ingredients", amount:0, iconPath:"scroll-solid.png"},
-            {name:"Prestige", amount:0, iconPath: "star-solid.png"},
             {name:"Health", amount:0, iconPath: "staff-snake-solid.png"},
-            {name:"Stress", amount:0, iconPath: "star-of-life-solid.png"},
-            {name:"Religiousness", amount:0, iconPath: "hands-praying-solid.png"}
         ]}/>
+      </div>
+      <div id="relations">
+        <Relations relations={appState.gamestate.relations}/>
       </div>
       <div id="next">
         <h1>Continue...</h1>

@@ -1,4 +1,5 @@
 import { AppState } from "../AppState";
+import {Relations} from "../Relations";
 
 export const SLEEP="SLEEP";
 export const PRAY="PRAY";
@@ -13,6 +14,8 @@ export const DAYS_OF_WEEK=[
     "Sunday",
 ]
 
+export type Faction = "artisans" | "aristocrats" | "commoners" | "clergy";  
+
 export type Activity = {
     name:string,
 } 
@@ -24,7 +27,8 @@ export type Day ={
 
 export type GameState = {
     assignActivity: (day: Day, activity: Activity) => void;
-    schedule:Array<Day>
+    schedule:Array<Day>;
+    relations:Relations;
 };
 
 export function initializeDay(name:string){
@@ -44,10 +48,28 @@ export function initializeWeek(){
     return DAYS_OF_WEEK.map(initializeDay)
 } 
 
+function initializeRelation(name:Faction){
+    return {
+        name,
+        known:0,
+        rep:0,
+    }
+}
+
+export function initializeRelations(){
+    return {
+        "artisans":initializeRelation("artisans"),
+        "aristocrats":initializeRelation("aristocrats"),
+        "commoners":initializeRelation("commoners"),
+        "clergy":initializeRelation("clergy"),
+    }
+}
+
 export function makeGameStateDefault(){
     return {
         schedule:initializeWeek(),
-        assignActivity:(day: Day, activity: Activity) => {}
+        assignActivity:(day: Day, activity: Activity) => {},
+        relations:initializeRelations(),
     }
 }
 
