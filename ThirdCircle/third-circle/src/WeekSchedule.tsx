@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
 import { AppState } from './AppState';
-import { Activity, Day, GameState } from './js/GameState';
+import { Activity } from './js/Activities';
+import { Day, GameState } from './js/GameState';
 import { GuiState } from './js/GuiState';
 import ScheduleDay from './ScheduleDay';
 

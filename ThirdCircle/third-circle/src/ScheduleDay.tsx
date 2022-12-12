@@ -3,7 +3,8 @@ import './App.css';
 import ActivityTile from './ActivityTile';
 import './ScheduleDay.css';
 import { GuiState } from './js/GuiState';
-import { Activity, Day } from './js/GameState';
+import { Day } from './js/GameState';
+import { Activity } from './js/Activities';
 
 type ScheduleDayProp = {
     day:Day,
@@ -12,21 +13,21 @@ type ScheduleDayProp = {
   };
 
 
-export function makeActivityTile(i:number,activity:Activity|null, guiState:GuiState, isSlot:boolean, dayBoundAssignActivity?:(activity: Activity) => void){
-  const labelToUse=activity ===null ? i.toString() : activity.name;
+export function makeActivityTile(i:number,activity:Activity, guiState:GuiState, isSlot:boolean, dayBoundAssignActivity?:(activity: Activity) => void){
   return <ActivityTile 
-            label={labelToUse}
+            i={i}
+            activity={activity}
             textAlignCenter={false}
             shadowed={guiState.isDragging}
             setDragging={guiState.setDragging}         
-            droppable={activity ===null}
+            droppable={activity.name ===""}
             draggable={!isSlot}
             dayBoundAssignActivity={dayBoundAssignActivity}
           ></ActivityTile>
 }
 
-function makeActivityTiles(activities:Array<Activity | null>, guiState:GuiState, dayBoundAssignActivity:(activity: Activity) => void){
-  return activities.map((activity:Activity|null, index:number)=>makeActivityTile(index,activity,guiState,true,dayBoundAssignActivity));
+function makeActivityTiles(activities:Array<Activity>, guiState:GuiState, dayBoundAssignActivity:(activity: Activity) => void){
+  return activities.map((activity:Activity, index:number)=>makeActivityTile(index,activity,guiState,true,dayBoundAssignActivity));
 }
 
 export default function ScheduleDay(props:ScheduleDayProp) {

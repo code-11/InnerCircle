@@ -39,11 +39,7 @@ function App() {
         </p>
       </div>
       <div id="stocks">
-        <Stocks stocks={[ 
-            {name:"Money", amount:0, iconPath:"coins-solid.png"},
-            {name:"Ingredients", amount:0, iconPath:"scroll-solid.png"},
-            {name:"Health", amount:0, iconPath: "staff-snake-solid.png"},
-        ]}/>
+        <Stocks stocks={appState.gamestate.stocks}/>
       </div>
       <div id="relations">
         <Relations relations={appState.gamestate.relations}/>

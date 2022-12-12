@@ -1,27 +1,24 @@
+import { Stock } from './js/Stocks';
 import './Stocks.css';
 
-type Stock = {
-    name: string;
-    amount: number;
-    iconPath?:string;
-  };
-
 type StocksProp = {
-    stocks: Stock[];
+    stocks: {
+        [key in Stock["name"]]: Stock
+    };
 };
 
 export default function Stocks(props:StocksProp) {
 
     const makeStock = (stock:Stock, index:number)=>{
         return <div key={index} className="stock-container">
-            {stock.iconPath ? <img className="stock-image" src={`/icons/${stock.iconPath}`}/> : null}
+            {stock.iconPath ? <img className="stock-image" src={`/icons/${stock.iconPath}`} title={stock.name}/> : null}
             <div>{stock.amount}</div>
         </div>
     }
 
     return( 
         <div className="stocks-container">
-            {props.stocks.map(makeStock)}
+            {Object.values(props.stocks).map(makeStock)}
         </div>);
     
 }

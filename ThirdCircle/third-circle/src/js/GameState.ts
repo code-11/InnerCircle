@@ -1,8 +1,7 @@
 import { AppState } from "../AppState";
 import {Relations} from "../Relations";
-
-export const SLEEP="SLEEP";
-export const PRAY="PRAY";
+import { Activity, createBlankActivity, PRAY, SLEEP } from "./Activities";
+import { Stock,money,ingredients,health } from "./Stocks";
 
 export const DAYS_OF_WEEK=[
     "Monday",
@@ -16,29 +15,28 @@ export const DAYS_OF_WEEK=[
 
 export type Faction = "artisans" | "aristocrats" | "commoners" | "clergy";  
 
-export type Activity = {
-    name:string,
-} 
-
 export type Day ={
     name:string,
-    activities:Array<Activity | null>
+    activities:Array<Activity>
 }
 
 export type GameState = {
     assignActivity: (day: Day, activity: Activity) => void;
     schedule:Array<Day>;
     relations:Relations;
+    stocks: {
+        [key in Stock["name"]] : Stock
+    }
 };
 
 export function initializeDay(name:string){
     return {
         name,
         activities:[
-            {name:PRAY},
-            null,
-            null,
-            {name:SLEEP},
+            PRAY,
+            createBlankActivity(),
+            createBlankActivity(),
+            SLEEP,
         ]
     }
 }
@@ -48,11 +46,11 @@ export function initializeWeek(){
     return DAYS_OF_WEEK.map(initializeDay)
 } 
 
-function initializeRelation(name:Faction){
+function initializeRelation(name:Faction,known=0, rep=0){
     return {
         name,
-        known:0,
-        rep:0,
+        known,
+        rep,
     }
 }
 
@@ -61,7 +59,15 @@ export function initializeRelations(){
         "artisans":initializeRelation("artisans"),
         "aristocrats":initializeRelation("aristocrats"),
         "commoners":initializeRelation("commoners"),
-        "clergy":initializeRelation("clergy"),
+        "clergy":initializeRelation("clergy", 2, 2),
+    }
+}
+
+export function initializeStocks(){
+    return {
+        money,
+        ingredients,
+        health
     }
 }
 
@@ -70,6 +76,7 @@ export function makeGameStateDefault(){
         schedule:initializeWeek(),
         assignActivity:(day: Day, activity: Activity) => {},
         relations:initializeRelations(),
+        stocks:initializeStocks(),
     }
 }
 

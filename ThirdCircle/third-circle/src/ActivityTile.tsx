@@ -1,9 +1,11 @@
 import './ActivityTile.css';
+import { Activity } from './js/Activities';
 import {drag, drop, allowDrop} from './js/DragDropUtililties';
-import { Activity, Day } from './js/GameState';
+import { Day } from './js/GameState';
 
 type ActivityTileProp = {
-    label: string,
+    i:number,
+    activity:Activity,
     textAlignCenter?:boolean,
     draggable?:boolean,
     droppable?:boolean,
@@ -18,13 +20,14 @@ export default function ActivityTile(props:ActivityTileProp) {
     const onDrop = props.droppable ? (ev:any)=>drop(props.setDragging,ev, props.dayBoundAssignActivity) : undefined;
     const onDragOver = props.droppable ? allowDrop: undefined;
     const draggable = props.draggable;
-    const onDragStart = props.draggable ? (ev:any)=>drag(props.setDragging,ev,props.label) : undefined; 
+    const onDragStart = props.draggable ? (ev:any)=>drag(props.setDragging,ev,props.activity) : undefined; 
     const onDragEnd = props.draggable ? (ev:any)=> props.setDragging(false) : undefined;
 
     const possiblyShadowed=props.shadowed && props.droppable ? " shadowed" : "";
 
     return (
     <div className={"activity-tile-container"+possiblyShadowed} 
+        title={props.activity.desc}
         onDrop={onDrop} 
         onDragOver={onDragOver} 
         draggable={draggable} 
@@ -32,7 +35,7 @@ export default function ActivityTile(props:ActivityTileProp) {
         onDragEnd={onDragEnd}
         style={{"textAlign":textAlignVal}}
     >
-        {props.label}
+        {props.activity.name=="" ? props.i : props.activity.name}
     </div>
     );
 }
