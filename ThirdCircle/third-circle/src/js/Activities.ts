@@ -30,6 +30,8 @@ export const createBlankActivity=()=>{
     }
 }
 
+export const isBlank=(activity:Activity)=> activity.name=='';
+
 export const allPossibleActivities:Activity[]=[
     //Indiv
     {name:"Socialize", desc:"+5 to artist rep", perform:(gameState)=>{

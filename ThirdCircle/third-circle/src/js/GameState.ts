@@ -1,6 +1,6 @@
 import { AppState } from "../AppState";
 import {Relations} from "../Relations";
-import { Activity, createBlankActivity, PRAY, SLEEP } from "./Activities";
+import { Activity, createBlankActivity, isBlank, PRAY, SLEEP } from "./Activities";
 import { Stock,money,ingredients,health } from "./Stocks";
 
 export const DAYS_OF_WEEK=[
@@ -84,7 +84,7 @@ export function bindAssignActivity(setAppState:any, appState:AppState){
     const assignActivity=(day:Day, activity:Activity)=>{
         const newGameState:GameState={...appState.gamestate};
         const dayIndex=newGameState.schedule.findIndex((day1)=>day.name==day1.name)
-        const activityIndex=newGameState.schedule[dayIndex].activities.findIndex((activity1)=>activity1==null);
+        const activityIndex=newGameState.schedule[dayIndex].activities.findIndex(isBlank);
         newGameState.schedule[dayIndex].activities[activityIndex]=activity
         setAppState({guistate:appState.guistate, gamestate:newGameState});
     }

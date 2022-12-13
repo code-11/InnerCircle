@@ -9,7 +9,8 @@ type ActivityTileProp = {
     textAlignCenter?:boolean,
     draggable?:boolean,
     droppable?:boolean,
-    setDragging?:any
+    setGuiState?:any,
+    getDraggedActivity?:any,
     shadowed?:boolean,
     dayBoundAssignActivity?:(activity: Activity) => void
 };
@@ -17,11 +18,11 @@ type ActivityTileProp = {
 export default function ActivityTile(props:ActivityTileProp) {
     const textAlignVal=props.textAlignCenter ? "center" : "left"; 
 
-    const onDrop = props.droppable ? (ev:any)=>drop(props.setDragging,ev, props.dayBoundAssignActivity) : undefined;
+    const onDrop = props.droppable ? (ev:any)=>drop(props.setGuiState, props.getDraggedActivity,ev, props.dayBoundAssignActivity) : undefined;
     const onDragOver = props.droppable ? allowDrop: undefined;
     const draggable = props.draggable;
-    const onDragStart = props.draggable ? (ev:any)=>drag(props.setDragging,ev,props.activity) : undefined; 
-    const onDragEnd = props.draggable ? (ev:any)=> props.setDragging(false) : undefined;
+    const onDragStart = props.draggable ? (ev:any)=>drag(props.setGuiState,ev,props.activity) : undefined; 
+    const onDragEnd = props.draggable ? (ev:any)=> props.setGuiState({isDragging:false}) : undefined;
 
     const possiblyShadowed=props.shadowed && props.droppable ? " shadowed" : "";
 

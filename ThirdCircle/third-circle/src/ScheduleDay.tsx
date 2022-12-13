@@ -19,7 +19,8 @@ export function makeActivityTile(i:number,activity:Activity, guiState:GuiState, 
             activity={activity}
             textAlignCenter={false}
             shadowed={guiState.isDragging}
-            setDragging={guiState.setDragging}         
+            setGuiState={guiState.setSelf}
+            getDraggedActivity={guiState.getDraggedActivity}         
             droppable={activity.name ===""}
             draggable={!isSlot}
             dayBoundAssignActivity={dayBoundAssignActivity}
@@ -31,7 +32,6 @@ function makeActivityTiles(activities:Array<Activity>, guiState:GuiState, dayBou
 }
 
 export default function ScheduleDay(props:ScheduleDayProp) {
-  const shadowed = props.guiState.isDragging;
   const dayBoundAssignActivity = (activity:Activity)=>props.assignActivity(props.day,activity);
   const activityTiles=makeActivityTiles(props.day.activities, props.guiState, dayBoundAssignActivity)
 
