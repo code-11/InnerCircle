@@ -7,6 +7,7 @@ import ActivityTile from './ActivityTile';
 import {makeActivityTile} from './ScheduleDay';
 import { AppState, makeAppStateDefault, bindAppState } from './AppState';
 import Relations from './Relations';
+import { tick } from './js/GameState';
 
 function App() {
   const [appState, setAppState]=useState(makeAppStateDefault());
@@ -45,7 +46,7 @@ function App() {
         <Relations relations={appState.gamestate.relations}/>
       </div>
       <div id="next">
-        <h1>Continue...</h1>
+        <h1 onClick={()=>tick(setAppState,appState)}>Continue...</h1>
       </div>
     </div>
   );

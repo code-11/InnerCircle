@@ -1,6 +1,6 @@
 import { AppState } from "../AppState";
 import {Relations} from "../Relations";
-import { Activity, createBlankActivity, isBlank, PRAY, SLEEP } from "./Activities";
+import { Activity, createBlankActivity, isBlank, MUNDANE_PRAYER, SLEEP } from "./Activities";
 import { Stock,money,ingredients,health } from "./Stocks";
 
 export const DAYS_OF_WEEK=[
@@ -33,7 +33,7 @@ export function initializeDay(name:string){
     return {
         name,
         activities:[
-            PRAY,
+            MUNDANE_PRAYER,
             createBlankActivity(),
             createBlankActivity(),
             SLEEP,
@@ -80,10 +80,24 @@ export function makeGameStateDefault(){
     }
 }
 
+export function tick(setAppState:any,appState:AppState){
+    let newGameState = appState.gamestate;
+    for (let day of newGameState.schedule){
+        for (let activity of day.activities){
+            if (activity.name!==''){
+                newGameState=activity.perform(newGameState);
+                console.log("did: "+activity.name);
+            }
+        }
+    }
+    setAppState({guistate:appState.guistate, gamestate:newGameState});
+}
+
 export function bindAssignActivity(setAppState:any, appState:AppState){
     const assignActivity=(day:Day, activity:Activity)=>{
         const newGameState:GameState={...appState.gamestate};
         const dayIndex=newGameState.schedule.findIndex((day1)=>day.name==day1.name)
+        //This assigns to next available slot
         const activityIndex=newGameState.schedule[dayIndex].activities.findIndex(isBlank);
         newGameState.schedule[dayIndex].activities[activityIndex]=activity
         setAppState({guistate:appState.guistate, gamestate:newGameState});

@@ -20,6 +20,8 @@ export const PRAY: Activity={name:"Communial Prayer", desc:"+5 to clergy rep", p
     newState.relations.clergy.rep+=5; 
     return newState}}
 
+export const MUNDANE_PRAYER: Activity={name:"Prayer", desc:"God awaits your prayers", perform:noop}
+
 export const SLEEP: Activity={name:"Sleep", desc:"", perform:noop}
 
 export const createBlankActivity=()=>{
