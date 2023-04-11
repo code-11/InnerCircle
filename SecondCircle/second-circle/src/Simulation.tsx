@@ -24,7 +24,7 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
     tasks:{[id:number]:JobTask[]};
     reactionTasks:{[id:number]:JobTask[]};
     transactionLog:Transaction[]=[];
-    month:number=1;
+    month:number=0;
 
     constructor(nation:NationBuilder, geography:GeographyBuilder){
         super({});
@@ -47,7 +47,7 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
 
     play(agents:Agent[],powerflow: Powerflow){
         this.jobAssignment();
-        this.assignDailyBaseTasks(powerflow);
+        // this.assignDailyBaseTasks(powerflow); Old main loop 
         const leader=powerflow.getHead();
         if (leader !==null && this.month==0){
             const tasks=leader.data.job.identifyThingsToDo(leader.data,agents,powerflow,this.nation,this);
@@ -56,30 +56,30 @@ export default class Simulation extends React.PureComponent<{},SimulationState>{
             }
         }
 
-        const jobDist=new Counter<Job>();
+        // const jobDist=new Counter<Job>();
 
-        //TODO: Main play loop goes here?
-        for (const citizen of this.nation.citizens){
-            const citizenTasks=this.getTasks(citizen);
-            for(const jobTask of citizenTasks){
-                jobTask.perform();
-            }
-            this.clearTasks(citizen);
+        // //TODO: Old main loop
+        // for (const citizen of this.nation.citizens){
+        //     const citizenTasks=this.getTasks(citizen);
+        //     for(const jobTask of citizenTasks){
+        //         jobTask.perform();
+        //     }
+        //     this.clearTasks(citizen);
 
-            jobDist.addElement(citizen.job);
+        //     jobDist.addElement(citizen.job);
 
-            citizen.evalHealth();
+        //     citizen.evalHealth();
 
-            this.reactionPhase(citizen);
-        }
+        //     this.reactionPhase(citizen);
+        // }
 
-        for(const citizen of this.nation.citizens){
-            //Move reaction tasks to tasks
-            this.tasks[citizen.id]=this.reactionTasks[citizen.id];
-            this.clearReactionTasks(citizen);
-        }
+        // for(const citizen of this.nation.citizens){
+        //     //Move reaction tasks to tasks
+        //     this.tasks[citizen.id]=this.reactionTasks[citizen.id];
+        //     this.clearReactionTasks(citizen);
+        // }
 
-        console.log(jobDist);
+        // console.log(jobDist);
     }
 
     executeTrade(providerId:number,buyerId:number,itemId:string,amount:number,money:number){
